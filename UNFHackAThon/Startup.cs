@@ -70,7 +70,7 @@ namespace UNFHackAThon
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{area=Participants}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

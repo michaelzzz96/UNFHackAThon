@@ -8,6 +8,7 @@ using UNFHackAThon.Models;
 
 namespace UNFHackAThon.Controllers
 {
+    [Area("Participants")]
     public class HomeController : Controller
     {
         public IActionResult Index()
