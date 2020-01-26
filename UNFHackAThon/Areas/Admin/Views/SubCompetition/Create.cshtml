@@ -60,7 +60,7 @@
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
-        function updateSubCategoryList() {
+        function updateSubCompetitionList() {
             var competitionSelected = document.getElementById("ddlCompetitionList").value;
             $list = $('#SubCompetitionList');
             $.ajax({
