@@ -34,18 +34,18 @@ namespace UNFHackAThon.Areas.Admin.Controllers
         //POST -CREATE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Competition Competion)
+        public async Task<IActionResult> Create(Competition competition)
         {
             if(ModelState.IsValid)
             {
                 //if valid
-                _db.Competition.Add(Competion);
+                _db.Competition.Add(competition);
                 await _db.SaveChangesAsync();
 
                 return RedirectToAction("Index");
 
             }
-            return View(Competion);
+            return View(competition);
         }
 
         //GET - EDIT
@@ -61,6 +61,22 @@ namespace UNFHackAThon.Areas.Admin.Controllers
                 return NotFound();
             }
             return View(competition);
+
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Competition competition)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Update(competition);
+                await _db.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(competition);
+        }
+
     }
 }
