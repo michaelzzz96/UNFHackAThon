@@ -14,7 +14,7 @@
 
 
 
-<div class="border backgroundWhiteBorder">
+<div class="border backgroundWhiteBorder row">
     <div class="col-8 border-right">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -45,7 +45,7 @@
     <div class="col-3 offset-1">
         @if (Model.SubCompetitionList.Count() > 0)
         {
-            <p> Existing Subcategories: </p>
+            <p> Existing SubCompetitions: </p>
 
             <div id="SubCategoryList">
                 <ul class="list-group"></ul>
