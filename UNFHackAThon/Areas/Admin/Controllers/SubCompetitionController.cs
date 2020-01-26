@@ -13,6 +13,11 @@ namespace UNFHackAThon.Areas.Admin.Controllers
     public class SubCompetitionController : Controller
     {
         private readonly ApplicationDbContext _db;
+
+        [TempData]
+        public string StatusMessage { get; set; }
+
+
         public SubCompetitionController(ApplicationDbContext db)
         {
             _db = db;
@@ -50,7 +55,8 @@ namespace UNFHackAThon.Areas.Admin.Controllers
 
                     if(doesSubCompetitionExists.Count() > 0)
                     {
-                        //Error 
+                    //Error 
+                    StatusMessage = "Error : Sub Competition exists under " + doesSubCompetitionExists.First().Competition.Name + " Competition. Please use another name. ";
                     }
                 else
                 {
@@ -63,7 +69,8 @@ namespace UNFHackAThon.Areas.Admin.Controllers
             {
                 CompetitionList = await _db.Competition.ToListAsync(),
                 SubCompetition = model.SubCompetition,
-                SubCompetitionList = await _db.SubCompetition.OrderBy(p => p.Name).Select(p => p.Name).ToListAsync()
+                SubCompetitionList = await _db.SubCompetition.OrderBy(p => p.Name).Select(p => p.Name).ToListAsync(),
+                StatusMessage = StatusMessage
             };
             return View(modelVM);
         }
