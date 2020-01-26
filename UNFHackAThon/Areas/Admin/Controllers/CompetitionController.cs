@@ -109,6 +109,23 @@ namespace UNFHackAThon.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //GET - DETAILS
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var competition = await _db.Competition.FindAsync(id);
+            if (competition == null)
+            {
+                return NotFound();
+            }
+
+            return View(competition);
+        }
+
 
     }
 }
