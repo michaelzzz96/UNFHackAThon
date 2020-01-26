@@ -78,5 +78,21 @@ namespace UNFHackAThon.Areas.Admin.Controllers
             return View(competition);
         }
 
+        //GET - DELETE
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var competition = await _db.Competition.FindAsync(id);
+            if (competition == null)
+            {
+                return NotFound();
+            }
+            return View(competition);
+
+        }
+
     }
 }
