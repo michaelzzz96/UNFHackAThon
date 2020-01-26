@@ -15,5 +15,6 @@ namespace UNFHackAThon.Data
         }
 
         public DbSet<Competition> Competition { get; set; }
+        public DbSet<SubCompetition> SubCompetition { get; set; }
     }
 }
