@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
+using UNFHackAThon.Models.ViewModels;
 
 namespace UNFHackAThon.Areas.Admin.Controllers
 {
@@ -24,5 +25,20 @@ namespace UNFHackAThon.Areas.Admin.Controllers
             return View(subCompetition);
 
         }
+
+        //GET - CREATE
+        public async Task<IActionResult> Create()
+        {
+            SubCompetitionAndCompetitionViewModel model = new SubCompetitionAndCompetitionViewModel()
+            {
+                CompetitionList = await _db.Competition.ToListAsync(),
+                SubCompetition = new Models.SubCompetition(),
+                SubCompetitionList = await _db.SubCompetition.OrderBy(p => p.Name).Select(p => p.Name).Distinct().ToListAsync()
+            };
+
+            return View(model);
+        }
+
+
     }
 }
