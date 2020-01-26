@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
+using UNFHackAThon.Models;
 using UNFHackAThon.Models.ViewModels;
 
 namespace UNFHackAThon.Areas.Admin.Controllers
@@ -73,6 +75,16 @@ namespace UNFHackAThon.Areas.Admin.Controllers
                 StatusMessage = StatusMessage
             };
             return View(modelVM);
+        }
+
+        [ActionName("GetSubCompetition")]
+        public async Task<IActionResult> GetSubCompetition(int id)
+        {
+            List<SubCompetition> subCompetitions = new List<SubCompetition>();
+            subCompetitions = await (from SubCompetition in _db.SubCompetition
+                               where SubCompetition.CompetitionId == id
+                               select SubCompetition).ToListAsync();
+            return Json(new SelectList(subCompetitions, "Id", "Name"));
         }
 
     }
