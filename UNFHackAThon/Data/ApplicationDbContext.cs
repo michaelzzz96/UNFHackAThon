@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using UNFHackAThon.Models;
 
 namespace UNFHackAThon.Data
 {
@@ -12,5 +13,7 @@ namespace UNFHackAThon.Data
             : base(options)
         {
         }
+
+        public DbSet<Competition> Competition { get; set; }
     }
 }
