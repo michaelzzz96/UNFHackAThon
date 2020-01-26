@@ -94,5 +94,21 @@ namespace UNFHackAThon.Areas.Admin.Controllers
 
         }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int? id)
+        {
+            var competition = await _db.Competition.FindAsync(id);
+
+            if (competition == null)
+            {
+                return View();
+            }
+            _db.Competition.Remove(competition);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 }
