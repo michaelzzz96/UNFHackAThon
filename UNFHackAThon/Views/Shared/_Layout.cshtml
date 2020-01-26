@@ -29,9 +29,26 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <li class="nav-item dropdown text-white-50">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Competition Management
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+                                <a class="dropdown-item">Competition</a>
+                                <a class="dropdown-item">Sub Competition</a>
+                                <a class="dropdown-item">Competition Item</a>
+                                <a class="dropdown-item">Coupons</a>
+                                <a class="dropdown-item">Users</a>
+
+                            </div>
+
                         </li>
+
+
+
+
+
+
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
