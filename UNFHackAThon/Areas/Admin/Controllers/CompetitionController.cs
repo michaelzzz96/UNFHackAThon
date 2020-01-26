@@ -47,5 +47,20 @@ namespace UNFHackAThon.Areas.Admin.Controllers
             }
             return View(Competion);
         }
+
+        //GET - EDIT
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var competition = await _db.Competition.FindAsync(id);
+            if(competition == null)
+            {
+                return NotFound();
+            }
+            return View(competition);
+        }
     }
 }
