@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
+using UNFHackAThon.Models;
 
 namespace UNFHackAThon.Areas.Admin.Controllers
 {
@@ -27,6 +28,24 @@ namespace UNFHackAThon.Areas.Admin.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+
+        //POST -CREATE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Competition Competion)
+        {
+            if(ModelState.IsValid)
+            {
+                //if valid
+                _db.Competition.Add(Competion);
+                await _db.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+
+            }
+            return View(Competion);
         }
     }
 }
