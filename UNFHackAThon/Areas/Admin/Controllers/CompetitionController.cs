@@ -20,8 +20,13 @@ namespace UNFHackAThon.Areas.Admin.Controllers
         //GET 
         public async Task<IActionResult> Index()
         {
-
             return View(await _db.Competition.ToListAsync());
+        }
+
+        //GET - CREATE
+        public IActionResult Create()
+        {
+            return View();
         }
     }
 }
