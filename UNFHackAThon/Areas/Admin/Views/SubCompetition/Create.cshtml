@@ -23,7 +23,7 @@
                     <label asp-for="SubCompetition.CompetitionId" class="col-form-label"></label>
                 </div>
                 <div class="col-5">
-                    <select id="ddlCategoryList" asp-for="SubCompetition.CompetitionId" asp-items="Model.CompetitionList.ToSelectListItem(Model.SubCompetition.CompetitionId)" class="form-control"></select>
+                    <select id="ddlCompetitionList" asp-for="SubCompetition.CompetitionId" asp-items="Model.CompetitionList.ToSelectListItem(Model.SubCompetition.CompetitionId)" class="form-control"></select>
                 </div>
             </div>
             <div class="form-group row">
@@ -47,14 +47,45 @@
         {
             <p> Existing SubCompetitions: </p>
 
-            <div id="SubCategoryList">
+            <div id="SubCompetitionList">
                 <ul class="list-group"></ul>
             </div>
         }
     </div>
 
 
-   
-</div>
 
+</div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function updateSubCategoryList() {
+            var competitionSelected = document.getElementById("ddlCompetitionList").value;
+            $list = $('#SubCompetitionList');
+            $.ajax({
+                url: '/Admin/SubCompetition/GetSubCompetition/' + competitionSelected,
+                type: 'GET',
+                dataType: 'text',
+                success: function (data) {
+                    results = JSON.parse(data);
+                    $list.html('');
+                    $list.append(' <ul class="list-group"> ');
+                    for (i in results) {
+                        $list.append('<li class="list-group-item">' + results[i].text + '</li>');
+                    }
+                    $list.append('</ul>');
+                }
+            });
+        }
+        $(document).ready(function () {
+            updateSubCompetitionList();
+        });
+        $("#ddlCompetitionList").on("change", function () {
+            updateSubCompetitionList();
+        });
+    </script>
+
+
+}
 
