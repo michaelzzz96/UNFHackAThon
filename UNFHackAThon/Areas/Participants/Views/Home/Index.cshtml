@@ -1,8 +1,18 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model UNFHackAThon.Models.ViewModels.IndexViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<br />
+
+<br />
+<br />
+
+<div class="backgroundWhite container">
+
+    @foreach (var competition in Model.Competition)
+    {
+        <div class="row" id="menu-wrapper">
+            <partial name="_ThumbnailAreaPartial" model="@Model.CompetitionItem.Where(u=>u.Competition.Name.Equals(competition.Name))" />
+        </div>
+    }
 </div>
+
