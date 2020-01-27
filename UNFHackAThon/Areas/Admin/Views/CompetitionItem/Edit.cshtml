@@ -7,77 +7,81 @@
 }
 
 <br />
-<h2 class="text-info">Edit CompetionItem</h2>
+<h2 class="text-info">Edit MenuItem</h2>
 <br />
 
 <form method="post" asp-action="Create" enctype="multipart/form-data">
-    <div class="border backgroundWhiteBorder">
+    <div class="border backgroundWhite row">
+        <input type="hidden" asp-for="CompetitionItem.Id" />
+
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="CompetitionItem.Name" class="col-form-label"></label>
+
+        <div class="col-8">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="CompetitionItem.Name" class="form-control" />
+                </div>
+                <span asp-validation-for="CompetitionItem.Name" class="text-danger"></span>
             </div>
-            <div class="col-5">
-                <input asp-for="CompetitionItem.Name" class="form-control" />
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.Description" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    @Html.TextAreaFor(m => m.CompetitionItem.Description)
+                </div>
+                <span asp-validation-for="CompetitionItem.Description" class="text-danger"></span>
             </div>
-            <span asp-validation-for="CompetitionItem.Name" class="text-danger"></span>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.Image" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" name="files" multiple class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.CompetitionId" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="@Model.CompetitionItem.CompetitionId" id="CompetitionId" asp-items="Model.Competition.ToSelectListItem(Model.CompetitionItem.CompetitionId)" class="form-control"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.SubCompetitionId" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="@Model.CompetitionItem.SubCompetitionId" name="SubCompetitionId" id="SubCompetitionId" asp-items="@(new SelectList(string.Empty,"Id","Name"))" class="form-control"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.Rating" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="CompetitionItem.Rating" asp-items="Html.GetEnumSelectList<CompetitionItem.EDiff>()" class="form-control"></select>
+                </div>
+            </div>
+
         </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="CompetitionItem.Description" class="col-form-label"></label>
-            </div>
-            <div class="col-5">
-                @Html.TextAreaFor(m => m.CompetitionItem.Description)
-            </div>
-            <span asp-validation-for="CompetitionItem.Description" class="text-danger"></span>
+        <div class="col-3 offset-1">
+            <img src="@Model.CompetitionItem.Image" width="100%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
         </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="CompetitionItem.Image" class="col-form-label"></label>
-            </div>
-            <div class="col-5">
-                <input type="file" name="files" multiple class="form-control">
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="CompetitionItem.CompetitionId" class="col-form-label"></label>
-            </div>
-            <div class="col-5">
-                <select asp-for="@Model.CompetitionItem.CompetitionId" id="CompetitionId" asp-items="Model.Competition.ToSelectListItem(Model.CompetitionItem.CompetitionId)" class="form-control"></select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="CompetitionItem.SubCompetitionId" class="col-form-label"></label>
-            </div>
-            <div class="col-5">
-                <select asp-for="@Model.CompetitionItem.SubCompetitionId" name="SubCompetitionId" id="SubCompetitionId" asp-items="@(new SelectList(string.Empty,"Id","Name"))" class="form-control"></select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="CompetitionItem.CompetitionDate" class="col-form-label"></label>
-            </div>
-            <div class="col-5">
-                <input asp-for="CompetitionItem.CompetitionDate" class="form-control" />
-            </div>
-            <span asp-validation-for="CompetitionItem.CompetitionDate" class="text-danger"></span>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="CompetitionItem.Rating" class="col-form-label"></label>
-            </div>
-            <div class="col-5">
-                <select asp-for="CompetitionItem.Rating" asp-items="Html.GetEnumSelectList<CompetitionItem.EDiff>()" class="form-control"></select>
+
+        <div class="col-8">
+            <div class="col-8 offset-4">
+                <partial name="_EditAndBackToListButton" model="Model.CompetitionItem.Id" />
             </div>
         </div>
 
-        <div class="form-group row">
-            <div class="col-5 offset-2">
-                <partial name="_CreateAndBackToListButton" />
-            </div>
-        </div>
+
     </div>
 </form>
 
@@ -90,10 +94,11 @@
         });
     </script>
 
+
     <script type="text/javascript">
         $(document).ready(function () {
             getSubCompetition();
-            $('#CompetitionId').change(function () {
+            $('#CompetionID').change(function () {
                 getSubCompetition();
             });
         });
@@ -102,7 +107,7 @@
             var ddlsoruce = '#CompetitionId';
             $.getJSON(url, { id: $(ddlsoruce).val() }, function (data) {
                 var items = '';
-                $('#SubCompetitionId').empty();
+                $('#SubCompetition').empty();
                 $.each(data, function (i, subcompetition) {
                     items += "<option value='" + subcompetition.value + "'>" + subcompetition.text + "</option>";
                 });
@@ -113,4 +118,4 @@
 
 
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-} 
+}

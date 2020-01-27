@@ -116,11 +116,11 @@ namespace UNFHackAThon.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
+                CompetitionItemVM.SubCompetition = await _db.SubCompetition.Where(s => s.CompetitionId == CompetitionItemVM.CompetitionItem.CompetitionId).ToListAsync();
                 return View(CompetitionItemVM);
             }
 
-            _db.CompetitionItem.Add(CompetitionItemVM.CompetitionItem);
-            await _db.SaveChangesAsync();
+     
 
             //Work on the image saving section
 
@@ -133,25 +133,51 @@ namespace UNFHackAThon.Areas.Admin.Controllers
             {
                 //files has been uploaded
                 var uploads = Path.Combine(webRootPath, "images");
-                var extension = Path.GetExtension(files[0].FileName);
+                var extension_new = Path.GetExtension(files[0].FileName);
 
-                using (var filesStream = new FileStream(Path.Combine(uploads, CompetitionItemVM.CompetitionItem.Id + extension), FileMode.Create))
+                //Delete the original file
+                var imagePath = Path.Combine(webRootPath, menuItemFromDb.Image.TrimStart('\\'));
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+                using (var filesStream = new FileStream(Path.Combine(uploads, CompetitionItemVM.CompetitionItem.Id + extension_new), FileMode.Create))
                 {
                     files[0].CopyTo(filesStream);
                 }
-                menuItemFromDb.Image = @"\images\" + CompetitionItemVM.CompetitionItem.Id + extension;
+             
+                menuItemFromDb.Image = @"\images\" + CompetitionItemVM.CompetitionItem.Id + extension_new;
             }
-            else
-            {
-                //no file was uploaded, so use default
-                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultCompetitionImage);
-                System.IO.File.Copy(uploads, webRootPath + @"\images\" + CompetitionItemVM.CompetitionItem.Id + ".png");
-                menuItemFromDb.Image = @"\images\" + CompetitionItemVM.CompetitionItem.Id + ".png";
-            }
+
+            menuItemFromDb.Name = CompetitionItemVM.CompetitionItem.Name;
+            menuItemFromDb.Description = CompetitionItemVM.CompetitionItem.Description;
+            menuItemFromDb.Rating = CompetitionItemVM.CompetitionItem.Name;
+            menuItemFromDb.CompetitionId = CompetitionItemVM.CompetitionItem.CompetitionId;
+            menuItemFromDb.SubCompetitionId = CompetitionItemVM.CompetitionItem.SubCompetitionId;
 
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        //GET : Details MenuItem
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CompetitionItemVM.CompetitionItem = await _db.CompetitionItem.Include(m => m.Competition).Include(m => m.SubCompetition).SingleOrDefaultAsync(m => m.Id == id);
+
+            if (CompetitionItemVM.CompetitionItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(CompetitionItemVM);
         }
     }
 }
