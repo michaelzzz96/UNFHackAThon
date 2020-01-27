@@ -147,5 +147,50 @@ namespace UNFHackAThon.Areas.Admin.Controllers
             return View(modelVM);
         }
 
+        //GET Details
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var subCompetition = await _db.SubCompetition.Include(s => s.Competition).SingleOrDefaultAsync(m => m.Id == id);
+            if (subCompetition == null)
+            {
+                return NotFound();
+            }
+
+            return View(subCompetition);
+        }
+
+        //GET Delete
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var subCategory = await _db.SubCompetition.Include(s => s.Competition).SingleOrDefaultAsync(m => m.Id == id);
+            if (subCategory == null)
+            {
+                return NotFound();
+            }
+
+            return View(subCategory);
+        }
+
+        //POST Delete
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var subCategory = await _db.SubCompetition.SingleOrDefaultAsync(m => m.Id == id);
+            _db.SubCompetition.Remove(subCategory);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+        }
+
+
     }
 }
