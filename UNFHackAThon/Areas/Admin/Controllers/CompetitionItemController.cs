@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
 using UNFHackAThon.Models.ViewModels;
+using UNFHackAThon.Utility;
 
 namespace UNFHackAThon.Areas.Admin.Controllers
 {
@@ -41,6 +43,46 @@ namespace UNFHackAThon.Areas.Admin.Controllers
         public IActionResult Create()
         {
             return View(CompetitionItemVM);
+        }
+
+        [HttpPost, ActionName("Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePOST()
+        {
+            CompetitionItemVM.CompetitionItem.SubCompetitionId = Convert.ToInt32(Request.Form["SubCompetitionId"].ToString());
+            if (!ModelState.IsValid)
+            {
+                return View(CompetitionItemVM);
+            }
+            _db.CompetitionItem.Add(CompetitionItemVM.CompetitionItem);
+            await _db.SaveChangesAsync();
+            //Work on the image saving section
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+            var menuItemFromDb = await _db.CompetitionItem.FindAsync(CompetitionItemVM.CompetitionItem.Id);
+            if (files.Count > 0)
+            {
+                //files has been uploaded
+                var uploads = Path.Combine(webRootPath, "images");
+                var extension = Path.GetExtension(files[0].FileName);
+
+                using (var filesStream = new FileStream(Path.Combine(uploads, CompetitionItemVM.CompetitionItem.Id + extension), FileMode.Create))
+                {
+                    files[0].CopyTo(filesStream);
+                }
+                menuItemFromDb.Image = @"\images\" + CompetitionItemVM.CompetitionItem.Id + extension;
+            }
+            else
+            {
+                //no file was uploaded, so use default
+                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultCompetitionImage);
+                System.IO.File.Copy(uploads, webRootPath + @"\images\" + CompetitionItemVM.CompetitionItem.Id + ".png");
+                menuItemFromDb.Image = @"\images\" + CompetitionItemVM.CompetitionItem.Id + ".png";
+            }
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
