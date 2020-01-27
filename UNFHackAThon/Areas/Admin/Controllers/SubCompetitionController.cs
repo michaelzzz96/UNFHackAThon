@@ -116,7 +116,7 @@ namespace UNFHackAThon.Areas.Admin.Controllers
         //POST - EDIT
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SubCompetitionAndCompetitionViewModel model)
+        public async Task<IActionResult> Edit(SubCompetitionAndCompetitionViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -129,7 +129,9 @@ namespace UNFHackAThon.Areas.Admin.Controllers
                 }
                 else
                 {
-                    _db.SubCompetition.Add(model.SubCompetition);
+                    var subCompFromDb = await _db.SubCompetition.FindAsync(model.SubCompetition.Id);
+                    subCompFromDb.Name = model.SubCompetition.Name;
+
                     await _db.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -141,6 +143,7 @@ namespace UNFHackAThon.Areas.Admin.Controllers
                 SubCompetitionList = await _db.SubCompetition.OrderBy(p => p.Name).Select(p => p.Name).ToListAsync(),
                 StatusMessage = StatusMessage
             };
+            //modelVM.SubCompetition.Id = id;
             return View(modelVM);
         }
 
