@@ -1,0 +1,84 @@
+﻿@model UNFHackAThon.Models.ViewModels.CompetitionItemViewModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+<br />
+<h2 class="text-info">Delete Competition Item</h2>
+<br />
+<form method="post">
+    <div class="backgroundWhiteBorder row">
+        <div class="col-8">
+            <input type="hidden" asp-for="CompetitionItem.Id" />
+            <fieldset disabled>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="CompetitionItem.Name" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="CompetitionItem.Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="CompetitionItem.Description" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        @Html.TextAreaFor(m => m.CompetitionItem.Description)
+                    </div>
+                </div>
+                
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="CompetitionItem.CompetitionId" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="CompetitionItem.Competition.Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="CompetitionItem.SubCompetitionId" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="CompetitionItem.SubCompetition.Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="CompetitionItem.Rating" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="CompetitionItem.Rating" asp-items="Html.GetEnumSelectList<CompetitionItem.EDiff>()" class="form-control"></select>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-3">
+            <img src="@Model.CompetitionItem.Image" width="100%" style="border-radius:5px;border:1px solid #bbb9b9;" />
+        </div>
+        <div class="col-8">
+            <div class="col-8 offset-4">
+                <partial name="_DeleteAndBackToListButton" model="Model.CompetitionItem.Id" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <script>
+            tinymce.init({
+                selector: 'textarea',
+                plugins: "lists",
+                toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist",
+                menubar: 'file edit format',
+                readonly: 1
+            });</script>
+    <script>tinymce.init({ selector: 'textarea' });</script>
+
+}
+

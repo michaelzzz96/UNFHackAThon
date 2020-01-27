@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
+using UNFHackAThon.Models;
 using UNFHackAThon.Models.ViewModels;
 using UNFHackAThon.Utility;
 
@@ -178,6 +179,48 @@ namespace UNFHackAThon.Areas.Admin.Controllers
             }
 
             return View(CompetitionItemVM);
+        }
+
+        //GET : Delete MenuItem
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            CompetitionItemVM.CompetitionItem = await _db.CompetitionItem.Include(m => m.Competition).Include(m => m.SubCompetition).SingleOrDefaultAsync(m => m.Id == id);
+
+            if (CompetitionItemVM.CompetitionItem == null)
+            {
+                return NotFound();
+            }
+
+            return View(CompetitionItemVM);
+        }
+
+        //POST Delete MenuItem
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            CompetitionItem menuItem = await _db.CompetitionItem.FindAsync(id);
+
+            if (menuItem != null)
+            {
+                var imagePath = Path.Combine(webRootPath, menuItem.Image.TrimStart('\\'));
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+                _db.CompetitionItem.Remove(menuItem);
+                await _db.SaveChangesAsync();
+
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
