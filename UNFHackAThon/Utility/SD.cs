@@ -8,5 +8,9 @@ namespace UNFHackAThon.Utility
     public static class SD
     {
         public const string DefaultCompetitionImage = "data.jpg";
+
+        public const string ManageUser = "Manager";
+
+        public const string ParticipantEndUser = "Participant";
     }
 }

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using UNFHackAThon.Models;
+using UNFHackAThon.Utility;
 
 namespace UNFHackAThon.Areas.Identity.Pages.Account
 {
@@ -19,17 +21,22 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
+
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
+
         }
 
         [BindProperty]
@@ -54,6 +61,10 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            public string Name { get; set; }
+
         }
 
         public void OnGet(string returnUrl = null)
@@ -63,13 +74,45 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+
+            string role = Request.Form["rdUserRole"].ToString();
+
+
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser 
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    Name = Input.Name
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    if(!await _roleManager.RoleExistsAsync(SD.ParticipantEndUser))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(SD.ParticipantEndUser));
+                    }
+                    if (!await _roleManager.RoleExistsAsync(SD.ManageUser))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(SD.ManageUser));
+                    }
+                    if(role== SD.ManageUser)
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.ManageUser);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user,SD.ParticipantEndUser);
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    }
+
+                    return RedirectToAction("Index", "User", new { area = "Admin" });
+
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

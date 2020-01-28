@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
 using UNFHackAThon.Models;
+using UNFHackAThon.Utility;
 
 namespace UNFHackAThon.Areas.Admin.Controllers
 {
+    [Authorize(Roles = SD.ManageUser)]
     [Area("Admin")]
     public class CompetitionController : Controller
     {

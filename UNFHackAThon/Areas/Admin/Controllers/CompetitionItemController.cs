@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using UNFHackAThon.Utility;
 namespace UNFHackAThon.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.ManageUser)]
     public class CompetitionItemController : Controller
     {
         private readonly ApplicationDbContext _db;
