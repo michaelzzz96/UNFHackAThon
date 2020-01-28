@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
@@ -27,8 +30,80 @@ namespace UNFHackAThon.Controllers
                 CompetitionItem = await _db.CompetitionItem.Include(m => m.Competition).Include(m => m.SubCompetition).ToListAsync(),
                 Competition = await _db.Competition.ToListAsync(),
             };
+
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim != null)
+            {
+                var cnt = _db.CompetitionCart.Where(u => u.ApplicationUserId == claim.Value).ToList().Count();
+                HttpContext.Session.SetInt32("ssCartCount",cnt);
+            }
+
+
             return View(IndexVM);
         }
+
+
+        [Authorize]
+        public async Task<IActionResult> Details(int id)
+        {
+            var competitionItemFromDb = await _db.CompetitionItem.Include(m => m.Competition).Include(m => m.SubCompetition).Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            CompetitionCart cartObj = new CompetitionCart()
+            {
+                CompetitionItem = competitionItemFromDb,
+                CompetitionItemId = competitionItemFromDb.Id
+            };
+
+            return View(cartObj);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(CompetitionCart CartObject)
+        {
+            CartObject.Id = 0;
+            if (ModelState.IsValid)
+            {
+                var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                CartObject.ApplicationUserId = claim.Value;
+
+                CompetitionCart cartFromDb = await _db.CompetitionCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId 
+                                                  && c.CompetitionItemId == CartObject.CompetitionItemId).FirstOrDefaultAsync();
+                if (cartFromDb == null)
+                {
+                  await  _db.CompetitionCart.AddAsync(CartObject);
+                }
+                else
+                {
+                    cartFromDb.Count = cartFromDb.Count + CartObject.Count;
+                }
+               await _db.SaveChangesAsync();
+
+                var count = _db.CompetitionCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId).ToList().Count();
+                HttpContext.Session.SetInt32("ssCartCount", count);
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                var competitionItemFromDb = await _db.CompetitionItem.Include(m => m.Competition).Include(m => m.SubCompetition).Where(m => m.Id == CartObject.CompetitionItemId).FirstOrDefaultAsync();
+
+                CompetitionCart cartObj = new CompetitionCart()
+                {
+                    CompetitionItem = competitionItemFromDb,
+                    CompetitionItemId = competitionItemFromDb.Id
+                };
+
+                return View(cartObj);
+            }
+        }
+
 
         public IActionResult Privacy()
         {

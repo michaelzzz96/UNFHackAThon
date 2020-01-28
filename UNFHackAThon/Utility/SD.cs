@@ -12,5 +12,7 @@ namespace UNFHackAThon.Utility
         public const string ManageUser = "Manager";
 
         public const string ParticipantEndUser = "Participant";
+
+        public const string ssCompetitionCartCount = "SD.ssCartCount";
     }
 }

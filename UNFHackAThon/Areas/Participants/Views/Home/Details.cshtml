@@ -1,0 +1,113 @@
+﻿@model UNFHackAThon.Models.CompetitionCart
+@using UNFHackAThon.Extentions
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Item Details</h2>
+<br />
+
+<form method="post">
+    <div class="border backgroundWhite row">
+
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-12 pb-4 d-none d-md-none">
+            <img src="@Model.CompetitionItem.Image" width="100%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
+        </div>
+        <div class="col-8">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="CompetitionItem.Name" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.Description" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <div class="border p-2">
+                        @Html.Raw(Model.CompetitionItem.Description)
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.CompetitionId" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="CompetitionItem.Competition.Name" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.SubCompetitionId" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="CompetitionItem.SubCompetition.Name" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="CompetitionItem.Rating" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="CompetitionItem.Rating" disabled asp-items="Html.GetEnumSelectList<CompetitionItem.EDiff>()" class="form-control"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-79">
+                    <label asp-for="CompetitionItem.CompetitionDate" class="col-form-label"></label>
+                </div>
+                <div class="col-99">
+                    <input asp-for="CompetitionItem.CompetitionDate" readonly class="form-control" />
+                </div>
+                <span asp-validation-for="CompetitionItem.CompetitionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Count" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Count"  class="form-control" />
+                    <span asp-validation-for="Count" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                </div>
+                <div class="col-4">
+                    <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                </div>
+                <div class="col-4">
+                    <button type="submit" value="Add Competiton" class="btn btn-primary form-control">Add Competiton</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 offset-1 d-none d-md-block">
+            <img src="@Model.CompetitionItem.Image" width="100%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
+        </div>
+
+
+
+
+
+    </div>
+    <input asp-for="CompetitionItemId" hidden />
+</form>
+
+@section Scripts{
+    
+
+
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,4 +1,8 @@
 ﻿@using UNFHackAThon.Utility
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor HttpContextAccessor
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,11 +30,11 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="Participants" asp-controller="Home" asp-action="Index">
-                   
+
                     <label class="text-info" style="cursor:pointer">UNFHackAThon</label>
-                    
+
                 </a>
-                
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -42,25 +46,42 @@
                         @if (User.IsInRole(SD.ManageUser))
                         {
 
-                        
 
-                        <li class="nav-item dropdown text-white-50">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Competition Management
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
-                                <a class="dropdown-item" asp-action="Index" asp-controller="Competition" asp-area="Admin">Competition</a>
-                                <a class="dropdown-item" asp-action="Index" asp-controller="SubCompetition" asp-area="Admin">Sub Competition</a>
-                                <a class="dropdown-item" asp-action="Index" asp-controller="CompetitionItem" asp-area="Admin">Competition Item</a>
-                                <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Users</a>
 
-                            </div>
+                            <li class="nav-item dropdown text-white-50">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Competition Management
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Competition" asp-area="Admin">Competition</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="SubCompetition" asp-area="Admin">Sub Competition</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="CompetitionItem" asp-area="Admin">Competition Item</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Users</a>
 
-                        </li>
+                                </div>
+
+                            </li>
                         }
-                    <li style="color:white">
-                        <i class="fas fa-user"></i>&nbsp; (0)
-                    </li>
+
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount") != null)
+                        {
+                            <li style="color:white">
+                                <a href="#" class="nav-link">
+                                    @{
+                                        var count = HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount");
+                                    }
+                                    <i class="fas fa-user"></i> &nbsp (@count)
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li style="color:white">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-user"></i> &nbsp; (0)
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

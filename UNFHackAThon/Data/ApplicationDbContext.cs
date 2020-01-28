@@ -19,7 +19,7 @@ namespace UNFHackAThon.Data
         public DbSet<CompetitionItem> CompetitionItem { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
-
+        public DbSet<CompetitionCart> CompetitionCart { get; set; }
 
 
     }
