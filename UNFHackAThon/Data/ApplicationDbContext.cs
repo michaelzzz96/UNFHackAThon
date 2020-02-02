@@ -21,6 +21,13 @@ namespace UNFHackAThon.Data
 
         public DbSet<CompetitionCart> CompetitionCart { get; set; }
 
+        public DbSet<OrderHeader> OrderHeader { get; set; }
 
+        public DbSet<OrderDetails> OrderDetails { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            
+        }
     }
 }

@@ -1,0 +1,96 @@
+﻿@model UNFHackAThon.Models.ViewModels.OrderDetailsCart
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form method="post">
+    @if (Model.listCart.Count > 0)
+    {
+        <br />
+        <input id="userID" asp-for="@Model.listCart[0].ApplicationUserId" hidden />
+        <div class="backgroundWhiteBorder">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header bg-dark text-light mi-0 row container">
+                        <div class="col-6">
+                            <i class="fade fas fa-user"></i> &nbsp;
+                            Competition Summary Page
+                        </div>
+                        <div class="col-6 text-right">
+                            <a asp-area="Participants" asp-controller="Cart" asp-action="Index" class="btn btn-outline-info btn-small">Back to Search and Join more Competitions</a>
+                        </div>
+                    </div>
+                 <div class="card-body">
+                     <div class="container rounded p-2">
+                         <div class="row">
+                             <div class="col-12-lg-6 pd-4">
+                                 <div class="row">
+                                     <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                         <span class="text-info">
+                                             Competition Details:
+                                         </span>
+                                     </h4>
+                                 </div>
+                                 <div class="row my-1">
+                                     <div class="col-3">
+                                         <lable>Name</lable>
+                                     </div>
+                                     <div class="col-9">
+                                         <input asp-for="@Model.OrderHeader.PickupName" type="text" class="form-control" />
+                                     </div>
+                                 </div>
+                                 <div class="row my-1">
+                                     <div class="col-3">
+                                         <lable>Date</lable>
+                                     </div>
+                                     <div class="col-9">
+                                         <input asp-for="@Model.OrderHeader.PickUpDate" id="datepicker" type="text" class="form-control" />
+                                     </div>
+                                 </div>
+                                 <div class="row my-1">
+                                     <div class="col-3">
+                                         <lable>Time</lable>
+                                     </div>
+                                     <div class="col-9">
+                                         <input asp-for="@Model.OrderHeader.PickUpTime" id="timepicker" type="text" class="form-control" />
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <div class="col-12 col-lg-5 offset-1">
+                                 
+                                     <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                         <span class="text-info">
+                                             Competition Summary:
+                                         </span>
+                                     </h4>
+                                <ul class="list-group-mb-3">
+                                    @{ var total = 0.0;}
+                                    @foreach(var details in Model.listCart)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-lg-between">
+                                            <div>
+                                                <h6 class="my-0">@details.CompetitionItem.Name</h6>
+                                                <small class="text-muted">Quantity: @details.Count</small>
+                                            </div>
+                                        </li>
+                                    }
+                                   </ul>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                    <div class="card-footer">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="backgroundWhiteBorder">No item added to Competition Page</div>
+    }
+
+</form>
+

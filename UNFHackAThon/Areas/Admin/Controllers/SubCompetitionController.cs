@@ -14,7 +14,7 @@ using UNFHackAThon.Utility;
 namespace UNFHackAThon.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.ManageUser)]
+
     public class SubCompetitionController : Controller
     {
         private readonly ApplicationDbContext _db;
