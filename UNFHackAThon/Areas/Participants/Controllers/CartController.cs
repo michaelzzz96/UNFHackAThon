@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using UNFHackAThon.Data;
 using UNFHackAThon.Models;
 using UNFHackAThon.Models.ViewModels;
@@ -80,10 +81,52 @@ namespace UNFHackAThon.Areas.Participants.Controllers
             detailCart.OrderHeader.PickupName = applicationUser.Name;
             detailCart.OrderHeader.PickUpTime = DateTime.Now;
 
-
-
-
             return View(detailCart);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Summary")]
+        public async Task<IActionResult> SummaryPost()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+
+            detailCart.listCart = await _db.CompetitionCart.Where(c => c.ApplicationUserId == claim.Value).ToListAsync();
+
+            detailCart.OrderHeader.OrderDate = DateTime.Now;
+            detailCart.OrderHeader.UserId = claim.Value;
+            detailCart.OrderHeader.PickUpTime = Convert.ToDateTime(detailCart.OrderHeader.PickUpDate.ToShortDateString() + " " + detailCart.OrderHeader.PickUpTime.ToShortTimeString());
+
+            List<OrderDetails> orderDetailsList = new List<OrderDetails>();
+            _db.OrderHeader.Add(detailCart.OrderHeader);
+            await _db.SaveChangesAsync();
+
+            foreach (var item in detailCart.listCart)
+            {
+                item.CompetitionItem = await _db.CompetitionItem.FirstOrDefaultAsync(m => m.Id == item.CompetitionItemId);
+                OrderDetails orderDetails = new OrderDetails
+                {
+                    CompetitionItemId = item.CompetitionItemId,
+                    OrderId = detailCart.OrderHeader.Id,
+                    Name = item.CompetitionItem.Name,
+                    Count = item.Count
+
+                };
+                _db.OrderDetails.Add(orderDetails);
+
+            }
+          
+            _db.CompetitionCart.RemoveRange(detailCart.listCart);
+            HttpContext.Session.SetInt32(SD.ssCompetitionCartCount, 0);
+            await _db.SaveChangesAsync();
+
+
+            await _db.SaveChangesAsync();
+            //return RedirectToAction("Index", "Home");
+            return RedirectToAction("Confirm", "Order");
+
         }
 
         public async Task<IActionResult> Plus(int cartId)
