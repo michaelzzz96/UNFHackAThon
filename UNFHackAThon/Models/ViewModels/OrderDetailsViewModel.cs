@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UNFHackAThon.Models;
 
-namespace Spice.Models.ViewModels
+namespace UNFHackAThon.Models.ViewModels
 {
     public class OrderDetailsViewModel
     {
