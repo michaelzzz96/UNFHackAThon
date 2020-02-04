@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Models.ViewModels;
 using UNFHackAThon.Data;
+using UNFHackAThon.Models;
 
 namespace Spice.Areas.Customer.Controllers
 {
@@ -36,9 +37,17 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsViewModel);
         }
 
+
+
         public IActionResult Index()
         {
             return View();
         }
+
+       
+
+
+        
+
     }
 }

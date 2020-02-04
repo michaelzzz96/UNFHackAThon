@@ -125,7 +125,8 @@ namespace UNFHackAThon.Areas.Participants.Controllers
 
             await _db.SaveChangesAsync();
             //return RedirectToAction("Index", "Home");
-            return RedirectToAction("Confirm", "Order");
+            return RedirectToAction("Confirm", "Order", new { id = detailCart.OrderHeader.Id });
+
 
         }
 
@@ -170,6 +171,7 @@ namespace UNFHackAThon.Areas.Participants.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
 
 
     }
