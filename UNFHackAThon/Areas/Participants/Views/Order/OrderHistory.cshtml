@@ -26,7 +26,7 @@
                         @Html.DisplayNameFor(m => m.OrderHeader.Id)
                     </th>
                     <th>
-                       Paticipant Name
+                        Paticipant Name
                     </th>
                     <th>
                         @Html.DisplayNameFor(m => m.OrderHeader.ApplicationUser.Email)
@@ -35,7 +35,7 @@
                         Competition Time
                     </th>
                     <th>
-                        Number of Competition(s) registered. 
+                        Number of Competition(s) registered.
                     </th>
 
 
@@ -59,6 +59,12 @@
                             @Html.DisplayFor(m => item.OrderDetails.Count)
                         </td>
 
+                        <td>
+                            <button type="submit" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                                <i class="far fa-list-alt"></i> Details
+                            </button>
+                        </td>
+
                     </tr>
                 }
             </table>
@@ -69,3 +75,47 @@
         }
     </div>
 </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light justify-content-center">
+                <h5 class="modal-title">Order Details</h5>
+            </div>
+            <div class="modal-body justify-content-center" id="myModalContent">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" style="width:20%" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+    var PostBackURL = '/Participants/Order/GetOrderDetails';
+    $(function () {
+        $(".anchorDetail").click(function () {
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.attr('data-id');
+            $.ajax({
+                type: "GET",
+                url: PostBackURL,
+                contentType: "application/json; charset=utf-8",
+                data: { "Id": id },
+                cache: false,
+                datatyype: "json",
+                success: function (data) {
+                    $('#myModalContent').html(data);
+                    $('#myModal').modal('show');
+                },
+                error: function () {
+                    alert("Dynamic content load failed");
+                }
+            })
+        })
+    })
+    </script>
+} 
