@@ -11,9 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
 using UNFHackAThon.Models;
 using UNFHackAThon.Models.ViewModels;
+using UNFHackAThon.Utility;
 
 namespace UNFHackAThon.Controllers
 {
+    [Authorize()]
     [Area("Participants")]
     public class HomeController : Controller
     {

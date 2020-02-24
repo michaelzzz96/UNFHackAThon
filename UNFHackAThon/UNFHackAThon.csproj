@@ -11,6 +11,8 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
+    <PackageReference Include="Sendgrid" Version="9.12.7" />
+    <PackageReference Include="SendGrid.Net40" Version="5.1.0" />
     <PackageReference Include="Stripe.net" Version="34.18.0" />
   </ItemGroup>
 

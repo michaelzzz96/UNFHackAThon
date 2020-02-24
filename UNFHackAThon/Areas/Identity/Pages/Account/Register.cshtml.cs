@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -91,6 +92,9 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    //_roleManager.Roles
+                    //_userManager.find
+                    
                     if(!await _roleManager.RoleExistsAsync(SD.ParticipantEndUser))
                     {
                         await _roleManager.CreateAsync(new IdentityRole(SD.ParticipantEndUser));
@@ -99,7 +103,9 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
                     {
                         await _roleManager.CreateAsync(new IdentityRole(SD.ManageUser));
                     }
-                    if(role== SD.ManageUser)
+
+                    var totalusers = _userManager.Users.Count();
+                    if(role== SD.ManageUser || totalusers == 0 )
                     {
                         await _userManager.AddToRoleAsync(user, SD.ManageUser);
                     }
@@ -112,21 +118,20 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
 
                     return RedirectToAction("Index", "User", new { area = "Admin" });
 
-
                     _logger.LogInformation("User created a new account with password.");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { userId = user.Id, code = code },
-                        protocol: Request.Scheme);
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { userId = user.Id, code = code },
+                    //    protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+
+
                 }
                 foreach (var error in result.Errors)
                 {

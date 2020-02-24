@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using UNFHackAThon.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using UNFHackAThon.Service;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace UNFHackAThon
 {
@@ -44,6 +46,8 @@ namespace UNFHackAThon
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<EmailOptions>(Configuration);
 
 
             services.AddSession(options =>
