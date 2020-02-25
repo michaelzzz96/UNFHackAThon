@@ -49,7 +49,8 @@
             </div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="CompetitionItem.SubCompetitionId" class="col-form-label"></label>
+                    <label class="col-form-label">Competition Type</label>
+                    <label hidden asp-for="CompetitionItem.SubCompetitionId" class="col-form-label"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="CompetitionItem.SubCompetition.Name" readonly class="form-control" />
