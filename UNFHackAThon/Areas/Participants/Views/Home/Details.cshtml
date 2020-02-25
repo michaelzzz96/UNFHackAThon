@@ -7,7 +7,7 @@
 }
 
 <br />
-<h2 class="text-info">Item Details</h2>
+<h2 class="text-info">Competition Details</h2>
 <br />
 
 <form method="post">
@@ -64,10 +64,10 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-79">
+                <div class="col-4">
                     <label asp-for="CompetitionItem.CompetitionDate" class="col-form-label"></label>
                 </div>
-                <div class="col-99">
+                <div class="col-8">
                     <input asp-for="CompetitionItem.CompetitionDate" readonly class="form-control" />
                 </div>
                 <span asp-validation-for="CompetitionItem.CompetitionDate" class="text-danger"></span>
@@ -80,7 +80,7 @@
                     <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
                 </div>
                 <div class="col-4">
-                    <button type="submit" value="Add Competiton" class="btn btn-primary form-control">Add Competiton</button>
+                    <button type="submit" value="Add Competiton" class="btn btn-primary form-control">Register</button>
                 </div>
             </div>
         </div>
