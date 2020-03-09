@@ -1,0 +1,22 @@
+﻿<h1>File upload</h1>
+
+@*
+    To post files to server we need form with post method,
+    and additionally browser must use multipart/form-data
+    encoding. Otherwise file will not be sent.
+*@
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="files" multiple />
+    <button type="submit">Upload</button>
+</form>
+
+
+@*
+    If upload succeeded we will show nice message to user.
+*@
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" style="margin-top:20px">
+        @ViewBag.Message
+    </div>
+}

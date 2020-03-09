@@ -13,12 +13,15 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
     <PackageReference Include="Sendgrid" Version="9.12.7" />
     <PackageReference Include="SendGrid.Net40" Version="5.1.0" />
+    <PackageReference Include="SharpZipLib" Version="1.2.0" />
     <PackageReference Include="Stripe.net" Version="34.18.0" />
   </ItemGroup>
 
 
   <ItemGroup>
+    <Folder Include="ApiController\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Code\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

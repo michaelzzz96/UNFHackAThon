@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -106,11 +108,74 @@ namespace UNFHackAThon.Controllers
             }
         }
 
+     
+        public ActionResult Code( )
+        {
+
+            return View();
+        }
+
+  
+        [HttpPost]
+        public IActionResult Code(IFormFile[] files)
+        {
+
+            try
+            {
+                // Iterate through uploaded files array
+                foreach (var file in files)
+                {
+                    // Extract file name from whatever was posted by browser
+                    // relative path, "MyFile.jpg"
+                    //var basePath = "C:\\temp\\";
+                    var fileName = System.IO.Path.GetFileName(file.FileName);
+
+
+                    // If file with same name exists delete it
+                    if (System.IO.File.Exists(fileName))
+                    {
+                        System.IO.File.Delete(fileName);
+                    }
+
+                    // Create new local file and copy contents of uploaded file
+                    // goal: basePath\CompetitionId\UserId\file.FileName
+                    // database row has Columns for Path=CompetitionId\UserId\RandomId.jpg and OriginalName=file.FileName
+
+                    // if fileName is Absolute, then use it as is and open the file mentioned
+                    // if fileName is relative... then use the current execution directory as the root folder, and then open a file at root + relative
+                    // System.IO.File.OpenWrite(@"C:\temp\myfile.jpg") -- open C:\temp\myfile.jpg
+                    // System.IO.File.OpenWrite(@"myfile.jpg") -- ?what folder? - whenever your code is
+                    using (var localFile = System.IO.File.OpenWrite(fileName))
+                    using (var uploadedFile = file.OpenReadStream())
+                    {
+                        uploadedFile.CopyTo(localFile);
+                    }
+                }
+
+                ViewBag.Message = "Files successfully uploaded";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = "Failed to upload, please try again.";
+            }
+
+            return View();
+        }
+
+
+
+
+
+       
+
+
 
         public IActionResult Privacy()
         {
             return View();
         }
+
+       
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
