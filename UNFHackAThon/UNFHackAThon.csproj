@@ -19,10 +19,8 @@
 
 
   <ItemGroup>
-    <Folder Include="ApiController\" />
     <Folder Include="Controllers\" />
     <Folder Include="Code\" />
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

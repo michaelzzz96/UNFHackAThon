@@ -67,13 +67,17 @@
                             </li>
                         }
 
-                        
-                            <li class="nav-item">
-                                <a asp-area="Participants" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
-                                    Competition History
-                                </a>
-                            </li>
-                        
+
+                        <li class="nav-item">
+                            <a asp-area="Participants" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
+                                Competition History
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-action="ManageOrder" asp-controller="Order" asp-area="Participants">Leaderboard</a>
+                        </li>
 
 
                         @if (HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount") != null)

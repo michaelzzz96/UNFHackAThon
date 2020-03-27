@@ -67,6 +67,37 @@ namespace UNFHackAThon.Areas.Customer.Controllers
 
         }
 
+        // May add admin and participant user
+        [Authorize]
+        public async Task<IActionResult> ManageOrder()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+
+
+            List<OrderDetailsViewModel> orderDetailsVM = new List<OrderDetailsViewModel>();
+
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
+
+         
+
+            foreach (OrderHeader item in OrderHeaderList)
+            {
+                OrderDetailsViewModel individual = new OrderDetailsViewModel
+                {
+                    OrderHeader = item,
+                    OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+                };
+                orderDetailsVM.Add(individual);
+            }
+
+            return View(orderDetailsVM);
+
+        }
+
+
+
         public async Task<IActionResult> GetOrderDetails(int Id)
         {
             OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
