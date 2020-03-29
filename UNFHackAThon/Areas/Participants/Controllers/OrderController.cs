@@ -78,7 +78,7 @@ namespace UNFHackAThon.Areas.Customer.Controllers
 
             List<OrderDetailsViewModel> orderDetailsVM = new List<OrderDetailsViewModel>();
 
-            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId != claim.Value).ToListAsync();
 
          
 
