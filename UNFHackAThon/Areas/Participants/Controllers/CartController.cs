@@ -43,17 +43,17 @@ namespace UNFHackAThon.Areas.Participants.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             var cart = _db.CompetitionCart.Where(c => c.ApplicationUserId == claim.Value);
-            if(cart != null)
+            if (cart != null)
             {
                 detailCart.listCart = cart.ToList();
             }
 
-            foreach(var list in detailCart.listCart)
+            foreach (var list in detailCart.listCart)
             {
                 list.CompetitionItem = await _db.CompetitionItem.FirstOrDefaultAsync(m => m.Id == list.CompetitionItemId);
                 detailCart.OrderHeader = detailCart.OrderHeader = detailCart.OrderHeader;
                 list.CompetitionItem.Description = SD.ConvertToRawHtml(list.CompetitionItem.Description);
-                if(list.CompetitionItem.Description.Length > 100)
+                if (list.CompetitionItem.Description.Length > 100)
                 {
                     list.CompetitionItem.Description = list.CompetitionItem.Description.Substring(0, 99) + "....";
                 }
@@ -81,7 +81,7 @@ namespace UNFHackAThon.Areas.Participants.Controllers
             {
                 list.CompetitionItem = await _db.CompetitionItem.FirstOrDefaultAsync(m => m.Id == list.CompetitionItemId);
                 detailCart.OrderHeader = detailCart.OrderHeader = detailCart.OrderHeader;
-               
+
             }
             detailCart.OrderHeader.PickupName = applicationUser.Name;
             detailCart.OrderHeader.PickUpTime = DateTime.Now;
@@ -122,7 +122,7 @@ namespace UNFHackAThon.Areas.Participants.Controllers
                 _db.OrderDetails.Add(orderDetails);
 
             }
-          
+
             _db.CompetitionCart.RemoveRange(detailCart.listCart);
             HttpContext.Session.SetInt32(SD.ssCompetitionCartCount, 0);
             await _db.SaveChangesAsync();

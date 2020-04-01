@@ -49,6 +49,11 @@ namespace UNFHackAThon
             services.AddSingleton<IEmailSender, EmailSender>();
             services.Configure<EmailOptions>(Configuration);
 
+            services.AddAuthentication().AddGoogle(go =>
+            {
+                go.ClientId = "509364459816-io7ucq51rg414ae45fk25ag7nmgcast5.apps.googleusercontent.com";
+                go.ClientSecret = "0_PttVxs3qpTg4haWPvJVQHT";
+            });
 
             services.AddSession(options =>
             {

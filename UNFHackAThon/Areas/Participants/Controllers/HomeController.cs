@@ -44,7 +44,7 @@ namespace UNFHackAThon.Controllers
             if (claim != null)
             {
                 var cnt = _db.CompetitionCart.Where(u => u.ApplicationUserId == claim.Value).ToList().Count();
-                HttpContext.Session.SetInt32("ssCartCount",cnt);
+                HttpContext.Session.SetInt32("ssCartCount", cnt);
             }
 
 
@@ -79,17 +79,17 @@ namespace UNFHackAThon.Controllers
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                 CartObject.ApplicationUserId = claim.Value;
 
-                CompetitionCart cartFromDb = await _db.CompetitionCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId 
+                CompetitionCart cartFromDb = await _db.CompetitionCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId
                                                   && c.CompetitionItemId == CartObject.CompetitionItemId).FirstOrDefaultAsync();
                 if (cartFromDb == null)
                 {
-                  await  _db.CompetitionCart.AddAsync(CartObject);
+                    await _db.CompetitionCart.AddAsync(CartObject);
                 }
                 else
                 {
                     cartFromDb.Count = cartFromDb.Count + CartObject.Count;
                 }
-               await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
 
                 var count = _db.CompetitionCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId).ToList().Count();
                 HttpContext.Session.SetInt32("ssCartCount", count);
@@ -174,7 +174,7 @@ namespace UNFHackAThon.Controllers
             return View();
         }
 
-       
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

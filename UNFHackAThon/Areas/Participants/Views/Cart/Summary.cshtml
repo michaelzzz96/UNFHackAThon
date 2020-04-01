@@ -39,7 +39,7 @@
                                             <input asp-for="@Model.OrderHeader.PickupName" id="txtName" type="text" class="form-control" />
                                         </div>
                                     </div>
-                                    
+
                                 </div>
 
                                 <div class="col-12 col-lg-5 offset-1">
@@ -88,15 +88,13 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js"></script>
-    
+
     <script>
         $(function () {
             $("#datepicker").datepicker({ minDate: 0, maxDate: "+1W" });
-            $("#timepicker").timepicker({'minTime': '11:00 AM', 'maxTime': '9:00 PM', step: '30'})
-
+            $("#timepicker").timepicker({ 'minTime': '11:00 AM', 'maxTime': '9:00 PM', step: '30' })
         });
-
-         function setPickUpTime() {
+        function setPickUpTime() {
             var dateSelected = document.getElementById("datepicker").value;
             var dt = new Date(dateSelected);
             var today = new Date();
@@ -128,12 +126,11 @@
         $('#datepicker').change(function () {
             setPickUpTime();
         });
-
         function validateInput() {
             var time = document.getElementById("timepicker").value;
             var dt = document.getElementById("datepicker").value;
             var name = document.getElementById("txtName").value;
-       
+
             if (time.toString() == '') {
                 alert("Please select pickup time");
                 return false;
@@ -151,8 +148,6 @@
                 }
             }
         }
-
-
     </script>
 }
 

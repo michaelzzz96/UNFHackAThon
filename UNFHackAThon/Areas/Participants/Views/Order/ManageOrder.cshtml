@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
+<br />
+<br />
+<button class="btn btn-primary" onclick="javascript: fnExcelReport('dataTable', 'data')">Export To Excel</button>
+
+
+
 <br />
 <br />
 <div class="border backgroundWhite">
@@ -18,49 +26,81 @@
     <div>
         @if (Model.Count() > 0)
         {
-        <table class="table table-striped border">
-            <tr class="table-secondary">
-                <th>
-                    Paticipant Name
-                </th>
-                <th>
-                    Competition Time
-                </th>
-                <th>
-                    Competition(s) Names.
-                </th>
-            </tr>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(m => item.OrderHeader.PickupName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(m => item.OrderHeader.PickUpTime)
-                    </td>
-                    <td>
-                        <ul>
-                            @foreach (var details in item.OrderDetails)
-                            {
-                                <li>@details.Name</li>
-                            }
-                        </ul>
-                    </td>
+            <table class="table table-bordered" id="dataTable">
+                <thead>
+                <tbody>
+                    <tr class="table-secondary">
+                        <th>
+                            Paticipant Name
+                        </th>
+                        <th>
+                            Competition Time
+                        </th>
+                        <th>
+                            Competition(s) Participated in.
+                        </th>
+                    </tr>
+                <thead>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(m => item.OrderHeader.PickupName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.OrderHeader.PickUpTime)
+                            </td>
+                            <td>
+                                <ul>
+                                    @foreach (var details in item.OrderDetails)
+                                    {
+                                        <li>@details.Name</li>
+                                    }
+                                </ul>
+                            </td>
 
-                </tr>
-            }
+                        </tr>
+                    }
 
-            
 
-        </table>
+                <tbody>
+            </table>
         }
         else
         {
             <p>No competition history exists...</p>
         }
     </div>
-    
+
 
 
 </div>
+
+@section Scripts{ 
+
+<script src="~/lib/bootstrap/dist/js/FileSaver.js"></script> 
+<script>
+    function fnExcelReport(id, name) {
+        var tab_text = '<html xmlns: x="urn:schemas-microsoft-com:office:excel">';
+        tab_text = tab_text + '<head><xml><x: ExcelWorkbook><x: ExcelWorksheets><x: ExcelWorksheet>';
+        tab_text = tab_text + '<x: Name>Test Sheet</x: Name>';
+        tab_text = tab_text + '<x: WorksheetOptions><x: Panes></x: Panes></x: WorksheetOptions ></x: ExcelWorksheet > ';
+        tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+        tab_text = tab_text + "<table border='1px' style='color:black'>";
+
+
+        var exportTable = $('#' + id).clone();
+        exportTable.find('th').last().remove();
+        exportTable.find('input').each(function (index, elem) { $(elem).remove(); });
+        exportTable.find('a').each(function (index, elem) { $(elem).remove(); });
+
+        tab_text = tab_text + exportTable.html();
+        tab_text = tab_text + '</table></body></html>';
+        var fileName = "Demo" + '.xlsx';
+
+        //Save the file
+        var blob = new Blob([tab_text], { type: "application/vnd.ms-excel;charset=utf-8" })
+        window.saveAs(blob, fileName);
+    }
+</script>
+    }
