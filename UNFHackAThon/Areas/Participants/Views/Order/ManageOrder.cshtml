@@ -1,4 +1,5 @@
 ﻿@model List<UNFHackAThon.Models.ViewModels.OrderDetailsViewModel>
+@using UNFHackAThon.Utility
 
 @{
     ViewData["Title"] = "ManageOrder";
@@ -39,6 +40,9 @@
                         <th>
                             Competition(s) Participated in.
                         </th>
+                        <th>
+                            Scores
+                        </th>
                     </tr>
                 <thead>
                     @foreach (var item in Model)
@@ -58,6 +62,29 @@
                                     }
                                 </ul>
                             </td>
+                            <td>
+                                <h6><string>@item.OrderDetails.Count</string></h6>
+
+
+                                @if (User.IsInRole(SD.ManageUser))
+                                {
+
+                                    <div class="col-6 col-sm-4 col-lg-6">
+                                        <div class="float-right mx-1">
+                                            <button type="submit" class="btn btn-primary" asp-action="plus" asp-controller="CartController" asp-route-cartId="@item.OrderDetails.Count">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div class="float-right mx-1">
+                                            <button type="submit" class="btn btn-danger" asp-action="minus" asp-controller="CartController" asp-route-cartId="@item.OrderDetails.Count">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+
+
+                            </td>
 
                         </tr>
                     }
@@ -76,31 +103,31 @@
 
 </div>
 
-@section Scripts{ 
+@section Scripts{
 
-<script src="~/lib/bootstrap/dist/js/FileSaver.js"></script> 
-<script>
-    function fnExcelReport(id, name) {
-        var tab_text = '<html xmlns: x="urn:schemas-microsoft-com:office:excel">';
-        tab_text = tab_text + '<head><xml><x: ExcelWorkbook><x: ExcelWorksheets><x: ExcelWorksheet>';
-        tab_text = tab_text + '<x: Name>Test Sheet</x: Name>';
-        tab_text = tab_text + '<x: WorksheetOptions><x: Panes></x: Panes></x: WorksheetOptions ></x: ExcelWorksheet > ';
-        tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
-        tab_text = tab_text + "<table border='1px' style='color:black'>";
+    <script src="~/lib/bootstrap/dist/js/FileSaver.js"></script>
+    <script>
+        function fnExcelReport(id, name) {
+            var tab_text = '<html xmlns: x="urn:schemas-microsoft-com:office:excel">';
+            tab_text = tab_text + '<head><xml><x: ExcelWorkbook><x: ExcelWorksheets><x: ExcelWorksheet>';
+            tab_text = tab_text + '<x: Name>Test Sheet</x: Name>';
+            tab_text = tab_text + '<x: WorksheetOptions><x: Panes></x: Panes></x: WorksheetOptions ></x: ExcelWorksheet > ';
+            tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+            tab_text = tab_text + "<table border='1px' style='color:black'>";
 
 
-        var exportTable = $('#' + id).clone();
-        exportTable.find('th').last().remove();
-        exportTable.find('input').each(function (index, elem) { $(elem).remove(); });
-        exportTable.find('a').each(function (index, elem) { $(elem).remove(); });
+            var exportTable = $('#' + id).clone();
+            exportTable.find('th').last().remove();
+            exportTable.find('input').each(function (index, elem) { $(elem).remove(); });
+            exportTable.find('a').each(function (index, elem) { $(elem).remove(); });
 
-        tab_text = tab_text + exportTable.html();
-        tab_text = tab_text + '</table></body></html>';
-        var fileName = "Demo" + '.xlsx';
+            tab_text = tab_text + exportTable.html();
+            tab_text = tab_text + '</table></body></html>';
+            var fileName = "Demo" + '.xlsx';
 
-        //Save the file
-        var blob = new Blob([tab_text], { type: "application/vnd.ms-excel;charset=utf-8" })
-        window.saveAs(blob, fileName);
-    }
-</script>
-    }
+            //Save the file
+            var blob = new Blob([tab_text], { type: "application/vnd.ms-excel;charset=utf-8" })
+            window.saveAs(blob, fileName);
+        }
+    </script>
+}
