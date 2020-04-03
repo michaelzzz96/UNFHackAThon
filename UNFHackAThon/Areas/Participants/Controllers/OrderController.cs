@@ -79,8 +79,9 @@ namespace UNFHackAThon.Areas.Customer.Controllers
             List<OrderDetailsViewModel> orderDetailsVM = new List<OrderDetailsViewModel>();
 
             List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId != claim.Value).ToListAsync();
+            List<OrderHeader> OrderHeaderLists = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
 
-         
+
 
             foreach (OrderHeader item in OrderHeaderList)
             {
@@ -90,6 +91,18 @@ namespace UNFHackAThon.Areas.Customer.Controllers
                     OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
                 };
                 orderDetailsVM.Add(individual);
+                foreach (OrderHeader items in OrderHeaderLists)
+                {
+                    OrderDetailsViewModel individuals = new OrderDetailsViewModel
+                    {
+                        OrderHeader = items,
+                        OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+                    };
+                    orderDetailsVM.Add(individuals);
+
+
+                }
+
             }
 
             return View(orderDetailsVM);
