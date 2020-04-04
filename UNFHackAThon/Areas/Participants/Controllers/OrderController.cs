@@ -9,6 +9,7 @@ using UNFHackAThon.Data;
 using UNFHackAThon.Models;
 using UNFHackAThon.Models.ViewModels;
 using UNFHackAThon.Utility;
+using Microsoft.AspNetCore.Http;
 
 //
 namespace UNFHackAThon.Areas.Customer.Controllers
@@ -122,5 +123,35 @@ namespace UNFHackAThon.Areas.Customer.Controllers
 
             return PartialView("_IndividualOrderDetails", orderDetailsViewModel);
         }
+
+        public async Task<IActionResult> Plus(int cartId)
+        {
+            var cart = await _db.CompetitionCart.FirstOrDefaultAsync(c => c.Id == cartId);
+            cart.Count += 1;
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Minus(int cartId)
+        {
+            var cart = await _db.CompetitionCart.FirstOrDefaultAsync(c => c.Id == cartId);
+            if (cart.Count == 1)
+            {
+                _db.CompetitionCart.Remove(cart);
+                await _db.SaveChangesAsync();
+
+                var cnt = _db.CompetitionCart.Where(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
+                HttpContext.Session.SetInt32(SD.ssCompetitionCartCount, cnt);
+            }
+            else
+            {
+                cart.Count -= 1;
+                await _db.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 }

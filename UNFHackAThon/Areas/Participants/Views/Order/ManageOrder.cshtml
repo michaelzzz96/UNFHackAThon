@@ -1,24 +1,27 @@
 ﻿@model List<UNFHackAThon.Models.ViewModels.OrderDetailsViewModel>
 @using UNFHackAThon.Utility
 
+
 @{
     ViewData["Title"] = "ManageOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
 <br />
 <br />
-<button class="btn btn-primary" onclick="javascript: fnExcelReport('dataTable', 'data')">Export To Excel</button>
 
 
+<div>
+    <input class="btn btn-primary" value="Export Analytics" onclick="fnExcelReport();" />
+    <iframe id="txtArea1" style="display:none"></iframe>
+</div>
 
 <br />
 <br />
 <div class="border backgroundWhite">
     <div class="row">
         <div class="col-6">
+           
             <h2 class="text-info"> Leader Board</h2>
         </div>
 
@@ -27,9 +30,9 @@
     <div>
         @if (Model.Count() > 0)
         {
-            <table class="table table-bordered" id="dataTable">
+            <table class="table" id="headerTable">
                 <thead>
-                <tbody>
+                <tbody id="tbody">
                     <tr class="table-secondary">
                         <th>
                             Paticipant Name
@@ -61,9 +64,9 @@
                                         <li>@details.Name</li>
                                     }
                                 </ul>
-                            </td>
                             <td>
                                 <h6><string>@item.OrderDetails.Count</string></h6>
+
 
 
                                 @if (User.IsInRole(SD.ManageUser))
@@ -71,20 +74,26 @@
 
                                     <div class="col-6 col-sm-4 col-lg-6">
                                         <div class="float-right mx-1">
-                                            <button type="submit" class="btn btn-primary" asp-action="plus" asp-controller="CartController" asp-route-cartId="@item.OrderDetails.Count">
+                                            <button type="submit" class="btn btn-primary" asp-action="plus" asp-controller="OrderController" asp-route-cartId="@item.listCart">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
                                         <div class="float-right mx-1">
-                                            <button type="submit" class="btn btn-danger" asp-action="minus" asp-controller="CartController" asp-route-cartId="@item.OrderDetails.Count">
+                                            <button type="submit" class="btn btn-danger" asp-action="minus" asp-controller="OrderController" asp-route-cartId="@item.OrderDetails.Count">
                                                 <i class="fas fa-minus"></i>
                                             </button>
                                         </div>
                                     </div>
+
+
                                 }
 
 
+
+
                             </td>
+
+
 
                         </tr>
                     }
@@ -99,35 +108,43 @@
         }
     </div>
 
-
-
 </div>
 
-@section Scripts{
 
-    <script src="~/lib/bootstrap/dist/js/FileSaver.js"></script>
+
+
+
+@section scripts{
     <script>
-        function fnExcelReport(id, name) {
-            var tab_text = '<html xmlns: x="urn:schemas-microsoft-com:office:excel">';
-            tab_text = tab_text + '<head><xml><x: ExcelWorkbook><x: ExcelWorksheets><x: ExcelWorksheet>';
-            tab_text = tab_text + '<x: Name>Test Sheet</x: Name>';
-            tab_text = tab_text + '<x: WorksheetOptions><x: Panes></x: Panes></x: WorksheetOptions ></x: ExcelWorksheet > ';
-            tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
-            tab_text = tab_text + "<table border='1px' style='color:black'>";
+        function fnExcelReport() {
+            var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+            var textRange; var j = 0;
+            tab = document.getElementById('headerTable'); // id of table
 
+            for (j = 0; j < tab.rows.length; j++) {
+                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+            }
 
-            var exportTable = $('#' + id).clone();
-            exportTable.find('th').last().remove();
-            exportTable.find('input').each(function (index, elem) { $(elem).remove(); });
-            exportTable.find('a').each(function (index, elem) { $(elem).remove(); });
+            tab_text = tab_text + "</table>";
+            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
 
-            tab_text = tab_text + exportTable.html();
-            tab_text = tab_text + '</table></body></html>';
-            var fileName = "Demo" + '.xlsx';
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf("MSIE ");
 
-            //Save the file
-            var blob = new Blob([tab_text], { type: "application/vnd.ms-excel;charset=utf-8" })
-            window.saveAs(blob, fileName);
+            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+            {
+                txtArea1.document.open("txt/html", "replace");
+                txtArea1.document.write(tab_text);
+                txtArea1.document.close();
+                txtArea1.focus();
+                sa = txtArea1.document.execCommand("SaveAs", true, "Say Thanks to Sumit.xls");
+            }
+            else                 //other browser not tested on IE 11
+                sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+            return (sa);
         }
     </script>
 }
