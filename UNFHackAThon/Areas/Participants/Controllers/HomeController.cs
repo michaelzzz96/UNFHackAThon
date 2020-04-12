@@ -24,10 +24,13 @@ namespace UNFHackAThon.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private IHostingEnvironment Environment;
 
-        public HomeController(ApplicationDbContext db)
+
+        public HomeController(ApplicationDbContext db, IHostingEnvironment _environment)
         {
             _db = db;
+            Environment = _environment;
         }
         public async Task<IActionResult> Index()
         {
@@ -118,52 +121,94 @@ namespace UNFHackAThon.Controllers
         }
 
 
+     
         [HttpPost]
-        public IActionResult Code(IFormFile[] files)
+        public IActionResult Code(List<IFormFile> postedFiles)
         {
+            string wwwPath = this.Environment.WebRootPath;
+            string contentPath = this.Environment.ContentRootPath;
 
-            try
+            string path = Path.Combine(this.Environment.WebRootPath, "Code");
+
+
+            if (!Directory.Exists(path))
             {
-                // Iterate through uploaded files array
-                foreach (var file in files)
+                Directory.CreateDirectory(path);
+            }
+
+            List<string> uploadedFiles = new List<string>();
+            foreach (IFormFile postedFile in postedFiles)
+            {
+                string fileName = Path.GetFileName(postedFile.FileName);
+                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                 {
-                    // Extract file name from whatever was posted by browser
-                    // relative path, "MyFile.jpg"
-                    //var basePath = "C:\\temp\\";
-                    var fileName = System.IO.Path.GetFileName(file.FileName);
-
-
-                    // If file with same name exists delete it
-                    if (System.IO.File.Exists(fileName))
-                    {
-                        System.IO.File.Delete(fileName);
-                    }
-
-                    // Create new local file and copy contents of uploaded file
-                    // goal: basePath\CompetitionId\UserId\file.FileName
-                    // database row has Columns for Path=CompetitionId\UserId\RandomId.jpg and OriginalName=file.FileName
-
-                    // if fileName is Absolute, then use it as is and open the file mentioned
-                    // if fileName is relative... then use the current execution directory as the root folder, and then open a file at root + relative
-                    // System.IO.File.OpenWrite(@"C:\temp\myfile.jpg") -- open C:\temp\myfile.jpg
-                    // System.IO.File.OpenWrite(@"myfile.jpg") -- ?what folder? - whenever your code is
-                    using (var localFile = System.IO.File.OpenWrite(fileName))
-                    using (var uploadedFile = file.OpenReadStream())
-                    {
-                        uploadedFile.CopyTo(localFile);
-                    }
+                    postedFile.CopyTo(stream);
+                    uploadedFiles.Add(fileName);
+                    ViewBag.Message += string.Format("<b>{0}</b> uploaded.<br />", fileName);
                 }
-
-                ViewBag.Message = "Files successfully uploaded";
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = "Failed to upload, please try again.";
             }
 
-            return View();
+            return View(uploadedFiles);
         }
 
+        public FileResult DownloadZipFile()
+        {
+
+            var fileName = string.Format("{0}_ImageFiles.zip", DateTime.Today.Date.ToString("dd-MM-yyyy") + "_1");
+
+            //
+            string wwwPath = this.Environment.WebRootPath;
+            string contentPath = this.Environment.ContentRootPath;
+            string path = Path.Combine(this.Environment.WebRootPath, "Code");
+
+
+            var tempOutPutPath = path + fileName;
+
+            using (ZipOutputStream s = new ZipOutputStream(System.IO.File.Create(tempOutPutPath)))
+            {
+                s.SetLevel(9); // 0-9, 9 being the highest compression  
+
+                byte[] buffer = new byte[4096];
+
+                var ImageList = new List<string>();
+
+
+                ImageList.Add(wwwPath + ("/Code/ArrayPractice.java"));
+
+
+                for (int i = 0; i < ImageList.Count; i++)
+                {
+                    ZipEntry entry = new ZipEntry(Path.GetFileName(ImageList[i]));
+                    entry.DateTime = DateTime.Now;
+                    entry.IsUnicodeText = true;
+                    s.PutNextEntry(entry);
+
+                    using (FileStream fs = System.IO.File.OpenRead(ImageList[i]))
+                    {
+                        int sourceBytes;
+                        do
+                        {
+                            sourceBytes = fs.Read(buffer, 0, buffer.Length);
+                            s.Write(buffer, 0, sourceBytes);
+                        } while (sourceBytes > 0);
+                    }
+                }
+                s.Finish();
+                s.Flush();
+                s.Close();
+
+            }
+
+            byte[] finalResult = System.IO.File.ReadAllBytes(tempOutPutPath);
+            if (System.IO.File.Exists(tempOutPutPath))
+                System.IO.File.Delete(tempOutPutPath);
+
+            if (finalResult == null || !finalResult.Any())
+                throw new Exception(String.Format("No Files found with Image"));
+
+            return File(finalResult, "application/zip", fileName);
+
+        }
 
 
 
