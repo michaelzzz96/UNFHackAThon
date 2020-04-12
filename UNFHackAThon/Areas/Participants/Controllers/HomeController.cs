@@ -154,7 +154,7 @@ namespace UNFHackAThon.Controllers
         public FileResult DownloadZipFile()
         {
 
-            var fileName = string.Format("{0}_ImageFiles.zip", DateTime.Today.Date.ToString("dd-MM-yyyy") + "_1");
+            var fileName = string.Format("{0}_CodeFiles.zip", DateTime.Today.Date.ToString("dd-MM-yyyy") + "_1");
 
             //
             string wwwPath = this.Environment.WebRootPath;
@@ -204,7 +204,7 @@ namespace UNFHackAThon.Controllers
                 System.IO.File.Delete(tempOutPutPath);
 
             if (finalResult == null || !finalResult.Any())
-                throw new Exception(String.Format("No Files found with Image"));
+                throw new Exception(String.Format("No Files found with Code"));
 
             return File(finalResult, "application/zip", fileName);
 
