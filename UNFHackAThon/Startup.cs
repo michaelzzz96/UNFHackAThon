@@ -36,6 +36,8 @@ namespace UNFHackAThon
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            
+            services.AddMiniProfiler().AddEntityFramework();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -72,7 +74,7 @@ namespace UNFHackAThon
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseSession();
+                app.UseMiniProfiler();
             }
             else
             {
@@ -81,6 +83,7 @@ namespace UNFHackAThon
                 app.UseHsts();
             }
 
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

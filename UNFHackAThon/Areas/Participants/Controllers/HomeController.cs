@@ -121,7 +121,7 @@ namespace UNFHackAThon.Controllers
         }
 
 
-     
+
         [HttpPost]
         public IActionResult Code(List<IFormFile> postedFiles)
         {
@@ -173,17 +173,18 @@ namespace UNFHackAThon.Controllers
                 var ImageList = new List<string>();
 
 
-                ImageList.Add(wwwPath + ("/Code/ArrayPractice.java"));
 
 
-                for (int i = 0; i < ImageList.Count; i++)
+
+                foreach (var file in Directory.EnumerateFiles(path))
                 {
-                    ZipEntry entry = new ZipEntry(Path.GetFileName(ImageList[i]));
+                    ZipEntry entry = new ZipEntry(file);
                     entry.DateTime = DateTime.Now;
                     entry.IsUnicodeText = true;
                     s.PutNextEntry(entry);
 
-                    using (FileStream fs = System.IO.File.OpenRead(ImageList[i]))
+
+                    using (FileStream fs = System.IO.File.OpenRead(file))
                     {
                         int sourceBytes;
                         do
@@ -197,6 +198,8 @@ namespace UNFHackAThon.Controllers
                 s.Flush();
                 s.Close();
 
+
+
             }
 
             byte[] finalResult = System.IO.File.ReadAllBytes(tempOutPutPath);
@@ -209,6 +212,7 @@ namespace UNFHackAThon.Controllers
             return File(finalResult, "application/zip", fileName);
 
         }
+
 
 
 
