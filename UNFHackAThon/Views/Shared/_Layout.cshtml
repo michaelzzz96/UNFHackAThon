@@ -51,7 +51,6 @@
                         {
 
 
-
                             <li class="nav-item dropdown text-white-50">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Competition Management
@@ -65,43 +64,43 @@
                                 </div>
 
                             </li>
+
                         }
 
-
-                        <li class="nav-item">
-                            <a asp-area="Participants" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
-                                Competition History
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a class="nav-link" asp-action="ManageOrder" asp-controller="Order" asp-area="Participants">Leaderboard</a>
-                        </li>
-
-                      
-
-
-                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount") != null)
-                        {
-                            <li style="color:white">
-                                <a asp-area="Participants" asp-controller="Cart" asp-action="Index" class="nav-link">
-                                    @{
-                                        var count = HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount");
-                                    }
-                                    <i class="fas fa-user"></i> &nbsp (@count)
+                            <li class="nav-item">
+                                <a asp-area="Participants" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
+                                    Competition History
                                 </a>
                             </li>
-                        }
-                        else
-                        {
-                            <li style="color:white">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-user"></i> &nbsp; (0)
-                                </a>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="ManageOrder" asp-controller="Order" asp-area="Participants">Leaderboard</a>
                             </li>
-                        }
-                    </ul>
+
+
+
+
+                            @if (HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount") != null)
+                            {
+                                <li style="color:white">
+                                    <a asp-area="Participants" asp-controller="Cart" asp-action="Index" class="nav-link">
+                                        @{
+                                            var count = HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount");
+                                        }
+                                        <i class="fas fa-user"></i> &nbsp (@count)
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li style="color:white">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-user"></i> &nbsp; (0)
+                                    </a>
+                                </li>
+                            }
+                        </ul>
                 </div>
             </div>
         </nav>

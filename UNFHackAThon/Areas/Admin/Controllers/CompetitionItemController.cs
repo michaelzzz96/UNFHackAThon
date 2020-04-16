@@ -15,6 +15,7 @@ using UNFHackAThon.Utility;
 namespace UNFHackAThon.Areas.Admin.Controllers
 {
     [Authorize(Roles = SD.ManageUser)]
+
     [Area("Admin")]
 
     public class CompetitionItemController : Controller

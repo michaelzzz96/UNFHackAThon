@@ -83,7 +83,7 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser 
+                var user = new ApplicationUser
                 {
                     UserName = Input.Email,
                     Email = Input.Email,
@@ -92,55 +92,49 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    //_roleManager.Roles
-                    //_userManager.find
+
                     
-                    if(!await _roleManager.RoleExistsAsync(SD.ParticipantEndUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.ParticipantEndUser));
+                   
+
+                            var totalusers = _userManager.Users.Count();
+
+                            if (role == SD.ManageUser || totalusers == 1)
+                            {
+                                await _userManager.AddToRoleAsync(user, SD.ManageUser);
+                            }
+                            else
+                            {
+                                await _userManager.AddToRoleAsync(user, SD.ParticipantEndUser);
+                                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                            }
+
+                            return RedirectToAction("Index", "User", new { area = "Admin" });
+
+                            _logger.LogInformation("User created a new account with password.");
+
+                            //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            //var callbackUrl = Url.Page(
+                            //    "/Account/ConfirmEmail",
+                            //    pageHandler: null,
+                            //    values: new { userId = user.Id, code = code },
+                            //    protocol: Request.Scheme);
+
+                            //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+
+
+                        }
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
                     }
-                    if (!await _roleManager.RoleExistsAsync(SD.ManageUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.ManageUser));
-                    }
 
-                    var totalusers = _userManager.Users.Count();
-                    if(role== SD.ManageUser || totalusers == 0 )
-                    {
-                        await _userManager.AddToRoleAsync(user, SD.ManageUser);
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user,SD.ParticipantEndUser);
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-
-                    }
-
-                    return RedirectToAction("Index", "User", new { area = "Admin" });
-
-                    _logger.LogInformation("User created a new account with password.");
-
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.Page(
-                    //    "/Account/ConfirmEmail",
-                    //    pageHandler: null,
-                    //    values: new { userId = user.Id, code = code },
-                    //    protocol: Request.Scheme);
-
-                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-
-
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    // If we got this far, something failed, redisplay form
+                    return Page();
                 }
             }
-
-            // If we got this far, something failed, redisplay form
-            return Page();
         }
-    }
-}
+    

@@ -42,18 +42,7 @@ namespace UNFHackAThon.Data
             _roleManager.CreateAsync(new IdentityRole(SD.ManageUser)).GetAwaiter().GetResult();
             _roleManager.CreateAsync(new IdentityRole(SD.ParticipantEndUser)).GetAwaiter().GetResult();
 
-            _userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = "admin@gmail.com",
-                Email = "admin@gmail.com",
-                Name = "Admin",
-                EmailConfirmed = true,
-                PhoneNumber = ""
-            }, "Admin123!").GetAwaiter().GetResult();
-
-            IdentityUser user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "admin@gmail.com");
-
-            await _userManager.AddToRoleAsync(user, SD.ManageUser);
+       
 
         }
 
