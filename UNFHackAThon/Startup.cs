@@ -37,19 +37,22 @@ namespace UNFHackAThon
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             
-            services.AddMiniProfiler().AddEntityFramework();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddIdentity<IdentityUser,IdentityRole>()
                 .AddDefaultTokenProviders()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSingleton<IEmailSender, EmailSender>();
             services.Configure<EmailOptions>(Configuration);
+
+           
 
             services.AddAuthentication().AddGoogle(go =>
             {
@@ -68,13 +71,12 @@ namespace UNFHackAThon
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseMiniProfiler();
             }
             else
             {
@@ -83,6 +85,8 @@ namespace UNFHackAThon
                 app.UseHsts();
             }
 
+            
+            dbInitializer.Initialize();
             app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

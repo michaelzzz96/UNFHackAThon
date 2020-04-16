@@ -52,24 +52,14 @@ namespace UNFHackAThon.Areas.Customer.Controllers
 
             List<OrderDetailsViewModel> orderList = new List<OrderDetailsViewModel>();
 
-            // Result set desired 
-            // Dapper https://github.com/StackExchange/Dapper
-
-            // | UserId | CompetitionId | CompetiationName | CompetitionDescription | Icon |
-            
-
-            // goto the database and get a set of Competitions for the user
-            // 1
             List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
 
-            // for each registered comp
-            // N followups
+            
             foreach (OrderHeader item in OrderHeaderList)
             { 
                 OrderDetailsViewModel individual = new OrderDetailsViewModel
                 {
                     OrderHeader = item,
-                                    // go to the database and get me information about the competition
                     OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
                 };
                 orderList.Add(individual);
