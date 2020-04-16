@@ -106,8 +106,9 @@ namespace UNFHackAThon.Areas.Identity.Pages.Account
                             {
                                 await _userManager.AddToRoleAsync(user, SD.ParticipantEndUser);
                                 await _signInManager.SignInAsync(user, isPersistent: false);
+                                return LocalRedirect(returnUrl);
 
-                            }
+                             }
 
                             return RedirectToAction("Index", "User", new { area = "Admin" });
 
