@@ -6,8 +6,9 @@
 
 
 <br />
-<h2 class="text-info">Details Menu Item</h2>
+<h2 class="text-info">Competition Details</h2>
 <br />
+
 <div class="backgroundWhiteBorder row">
     <div class="col-8">
         <fieldset disabled>
@@ -31,7 +32,7 @@
 
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="CompetitionItem.CompetitionId" class="custom-label"></label>
+                    <label>Competition Event</label>
                 </div>
                 <div class="col-8">
                     <input asp-for="CompetitionItem.Competition.Name" class="form-control" />
@@ -39,25 +40,18 @@
             </div>
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="CompetitionItem.SubCompetitionId" class="custom-label"></label>
+                    <label>Competition Type</label>
                 </div>
                 <div class="col-8">
                     <input asp-for="CompetitionItem.SubCompetition.Name" class="form-control" />
                 </div>
             </div>
+           
             <div class="form-group row">
                 <div class="col-4">
-                    <label asp-for="CompetitionItem.Rating" class="custom-label"></label>
+                    <label>Competition Date</label>
                 </div>
                 <div class="col-8">
-                    <select asp-for="CompetitionItem.Rating" asp-items="Html.GetEnumSelectList<CompetitionItem.EDiff>()" class="form-control"></select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-2">
-                    <label asp-for="CompetitionItem.CompetitionDate" class="col-form-label"></label>
-                </div>
-                <div class="col-5">
                     <input asp-for="CompetitionItem.CompetitionDate" class="form-control" />
                 </div>
                 <span asp-validation-for="CompetitionItem.CompetitionDate" class="text-danger"></span>
@@ -68,6 +62,7 @@
     <div class="col-3">
         <img src="@Model.CompetitionItem.Image" width="100%" style="border-radius:5px;border:1px solid #bbb9b9;" />
     </div>
+
     <div class="col-8">
         <div class="col-8 offset-4">
             <partial name="_DetailsAndBackToListButton" model="Model.CompetitionItem.Id" />

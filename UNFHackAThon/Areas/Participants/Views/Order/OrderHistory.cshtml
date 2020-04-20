@@ -33,39 +33,42 @@
                         @Html.DisplayNameFor(m => m.OrderHeader.ApplicationUser.Email)
                     </th>
                     <th>
-                        Competition Time
+                        Competition Date/Time
                     </th>
                     <th>
                         Number of Competition(s) registered.
                     </th>
-
+                    <th>
+                       
+                    </th>
 
                 </tr>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(m => item.OrderHeader.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(m => item.OrderHeader.PickupName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(m => item.OrderHeader.ApplicationUser.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(m => item.OrderHeader.PickUpTime)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(m => item.OrderDetails.Count)
-                        </td>
-                        <td>
-                            <button type="submit" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
-                                <i class="far fa-list-alt"></i> Details
-                            </button>
-                        </td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => item.OrderHeader.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.OrderHeader.PickupName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.OrderHeader.ApplicationUser.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.OrderHeader.OrderDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.OrderDetails.Count)
+                    </td>
+                   
+                    <td>
+                        <button type="submit" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                            <i class="far fa-list-alt"></i> Details
+                        </button>
+                    </td>
 
-                    </tr>
+                </tr>
                 }
             </table>
         }

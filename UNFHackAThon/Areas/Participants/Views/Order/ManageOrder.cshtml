@@ -7,109 +7,115 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<br />
-<br />
+<form method="post">
+
+    <br /><br />
 
 
-<div>
-    <input class="btn btn-primary" value="Export Analytics" onclick="fnExcelReport();" />
-    <iframe id="txtArea1" style="display:none"></iframe>
-</div>
+            <br />
 
-<br />
-<br />
-<div class="border backgroundWhite">
-    <div class="row">
-        <div class="col-6">
-           
-            <h2 class="text-info"> Leader Board</h2>
-        </div>
 
-    </div>
-    <br />
-    <div>
-        @if (Model.Count() > 0)
-        {
-            <table class="table" id="headerTable">
-                <thead>
-                <tbody id="tbody">
-                    <tr class="table-secondary">
-                        <th>
-                            Paticipant Name
-                        </th>
-                        <th>
-                            Competition Time
-                        </th>
-                        <th>
-                            Competition(s) Participated in.
-                        </th>
-                        <th>
-                            Scores
-                        </th>
-                    </tr>
-                <thead>
-                    @foreach (var item in Model)
+            <div>
+                <input class="btn btn-primary" value="Export Analytics" onclick="fnExcelReport();" />
+                <iframe id="txtArea1" style="display:none"></iframe>
+            </div>
+
+            <br />
+            <br />
+            <div class="border backgroundWhite">
+                <div class="row">
+                    <div class="col-6">
+
+                        <h2 class="text-info"> Leader Board</h2>
+                    </div>
+
+                </div>
+                <br />
+                <div>
+                    @if (Model.Count() > 0)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(m => item.OrderHeader.PickupName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(m => item.OrderHeader.PickUpTime)
-                            </td>
-                            <td>
-                                <ul>
-                                    @foreach (var details in item.OrderDetails)
-                                    {
-                                        <li>@details.Name</li>
-                                    }
-                                </ul>
-                            <td>
-                                <h6><string>@item.OrderDetails.Count</string></h6>
-
-
-
-                                @if (User.IsInRole(SD.ManageUser))
+                        <table class="table" id="headerTable">
+                            <thead>
+                            <tbody id="tbody">
+                                <tr class="table-secondary">
+                                    <th>
+                                        Paticipant Name
+                                    </th>
+                                    <th>
+                                        Competition Date/Time
+                                    </th>
+                                    <th>
+                                        Competition(s) Participated in.
+                                    </th>
+                                    <th>
+                                        Scores
+                                    </th>
+                                </tr>
+                            <thead>
+                                @foreach (var item in Model)
                                 {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(m => item.OrderHeader.PickupName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.OrderHeader.OrderDate)
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                @foreach (var details in item.OrderDetails)
+                                                {
+                                                    <li>@details.Name</li>
+                                                }
+                                            </ul>
+                                        <td>
+                                            <h6>@item.OrderDetails.Count</h6>
 
-                                    <div class="col-6 col-sm-4 col-lg-6">
-                                        <div class="float-right mx-1">
-                                            <button type="submit" class="btn btn-primary" asp-action="plus" asp-controller="OrderController" asp-route-cartId="@item.listCart">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                        <div class="float-right mx-1">
-                                            <button type="submit" class="btn btn-danger" asp-action="minus" asp-controller="OrderController" asp-route-cartId="@item.OrderDetails.Count">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
 
 
+                                            @if (User.IsInRole(SD.ManageUser))
+                                            {
+
+                                                <div class="col-6 col-sm-4 col-lg-6">
+                                                    <div class="float-right mx-1">
+                                                        <button type="submit" class="btn btn-primary" asp-action="add" asp-controller="OrderController" asp-route-cartsId="@item.OrderDetails.Count">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="float-right mx-1">
+                                                        <button type="submit" class="btn btn-danger" asp-action="decrease" asp-controller="OrderController" asp-route-cartsId="@item.OrderDetails.Count">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+
+                                            }
+
+
+
+
+                                        </td>
+
+
+
+                                    </tr>
                                 }
 
 
-
-
-                            </td>
-
-
-
-                        </tr>
+                            <tbody>
+                        </table>
                     }
-
-
-                <tbody>
-            </table>
-        }
-        else
-        {
-            <p>No competition history exists...</p>
-        }
+                    else
+                    {
+                        <p>No competition history exists...</p>
+                    }
+             
+         
+        </div>
     </div>
-
-</div>
-
+    
+</form>
 
 
 

@@ -32,13 +32,16 @@ namespace UNFHackAThon.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
             {
                 OrderHeader = await _db.OrderHeader.Include(o => o.ApplicationUser).FirstOrDefaultAsync(o => o.Id == id && o.UserId == claim.Value),
                 OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == id).ToListAsync()
             };
+
             return View(orderDetailsViewModel);
         }
+
         public IActionResult Index()
         {
             return View();
@@ -125,23 +128,26 @@ namespace UNFHackAThon.Areas.Customer.Controllers
             return PartialView("_IndividualOrderDetails", orderDetailsViewModel);
         }
 
-        public async Task<IActionResult> Plus(int cartId)
+
+
+
+        public async Task<IActionResult> Add(int cartsId)
         {
-            var cart = await _db.CompetitionCart.FirstOrDefaultAsync(c => c.Id == cartId);
+            var cart = await _db.OrderDetails.FirstOrDefaultAsync(c => c.Count == cartsId);
             cart.Count += 1;
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Minus(int cartId)
+        public async Task<IActionResult> Decrease(int cartsId)
         {
-            var cart = await _db.CompetitionCart.FirstOrDefaultAsync(c => c.Id == cartId);
+            var cart = await _db.OrderDetails.FirstOrDefaultAsync(c => c.Count == cartsId);
             if (cart.Count == 1)
             {
-                _db.CompetitionCart.Remove(cart);
+                _db.OrderDetails.Remove(cart);
                 await _db.SaveChangesAsync();
 
-                var cnt = _db.CompetitionCart.Where(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
+                var cnt = _db.OrderDetails.Where(u => u.Name == cart.Name).ToList().Count;
                 HttpContext.Session.SetInt32(SD.ssCompetitionCartCount, cnt);
             }
             else

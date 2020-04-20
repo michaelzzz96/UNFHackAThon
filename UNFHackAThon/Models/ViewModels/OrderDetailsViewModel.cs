@@ -11,7 +11,6 @@ namespace UNFHackAThon.Models.ViewModels
         public OrderHeader OrderHeader { get; set; }
         public List<OrderDetails> OrderDetails { get; set; }
         public IEnumerable<ApplicationUser> ApplicationUser { get; set; }
-
         public List<CompetitionCart> listCart { get; set; }
     }
 }

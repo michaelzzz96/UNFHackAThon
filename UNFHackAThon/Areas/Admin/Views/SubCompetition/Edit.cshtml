@@ -9,7 +9,7 @@
 
 
 <br />
-<h2 class="text-info">Edit Sub Competition</h2>
+<h2 class="text-info">Edit Competition Type</h2>
 <br />
 
 <partial name="_StatusMessage" model="Model.StatusMessage" />
@@ -22,7 +22,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="SubCompetition.CompetitionId" class="col-form-label"></label>
+                    <label>Competition Event</label>
                 </div>
                 <div class="col-5">
                     <select id="ddlCompetitionList" asp-for="SubCompetition.CompetitionId" disabled asp-items="Model.CompetitionList.ToSelectListItem(Model.SubCompetition.CompetitionId)" class="form-control"></select>
@@ -30,7 +30,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="SubCompetition.Name" class="col-form-label"></label>
+                    <label>Competition Type</label>
                 </div>
                 <div class="col-5">
                     <input asp-for="SubCompetition.Name" class="form-control" />
@@ -47,7 +47,7 @@
     <div class="col-3 offset-1">
         @if (Model.SubCompetitionList.Count() > 0)
         {
-            <p> Existing SubCompetitions: </p>
+            <p> Existing Competition Type: </p>
 
             <div id="SubCompetitionList">
                 <ul class="list-group"></ul>

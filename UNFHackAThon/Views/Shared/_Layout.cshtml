@@ -31,11 +31,21 @@
 </head>
 <body class="search-background">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+
+        <div id="banner">
+            <div id="wrapper">
+                <div id="container">
+                    <img class="banner-img" src="~/images/banner2.jpg" alt="UNF logo" />
+                </div>
+            </div>
+        </div>
+
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-8" style="background-color:#696969">
             <div class="container">
                 <a class="navbar-brand" asp-area="Participants" asp-controller="Home" asp-action="Index">
 
-                    <label class="text-info" style="cursor:pointer">UNFHackAThon</label>
+                    <label class="text-white" style="cursor:pointer">UNFHackAThon</label>
 
                 </a>
 
@@ -43,16 +53,17 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+
+                <div style="color:white" class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul style="color:white" class="navbar-nav flex-grow-1">
 
                         @if (User.IsInRole(SD.ManageUser))
                         {
 
 
                             <li class="nav-item dropdown text-white-50">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:white">
                                     Competition Management
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
@@ -67,40 +78,40 @@
 
                         }
 
-                            <li class="nav-item">
-                                <a asp-area="Participants" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
-                                    Competition History
+                        <li class="nav-item">
+                            <a asp-area="Participants" asp-controller="Order" asp-action="OrderHistory" style="color:white" class="nav-link">
+                                Competition History
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a style="color:white" class="nav-link" asp-action="ManageOrder" asp-controller="Order" asp-area="Participants">Leaderboard</a>
+                        </li>
+
+
+
+
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount") != null)
+                        {
+                            <li style="color:white">
+                                <a asp-area="Participants" asp-controller="Cart" asp-action="Index" style="color:white" class="nav-link">
+                                    @{
+                                        var count = HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount");
+                                    }
+                                    <i class="fas fa-user"></i> &nbsp (@count)
                                 </a>
                             </li>
-
-
-                            <li class="nav-item">
-                                <a class="nav-link" asp-action="ManageOrder" asp-controller="Order" asp-area="Participants">Leaderboard</a>
+                        }
+                        else
+                        {
+                            <li style="color:white">
+                                <a href="#" style="color:white" class="nav-link">
+                                    <i class="fas fa-user"></i> &nbsp; (0)
+                                </a>
                             </li>
-
-
-
-
-                            @if (HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount") != null)
-                            {
-                                <li style="color:white">
-                                    <a asp-area="Participants" asp-controller="Cart" asp-action="Index" class="nav-link">
-                                        @{
-                                            var count = HttpContextAccessor.HttpContext.Session.GetInt32("ssCartCount");
-                                        }
-                                        <i class="fas fa-user"></i> &nbsp (@count)
-                                    </a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li style="color:white">
-                                    <a href="#" class="nav-link">
-                                        <i class="fas fa-user"></i> &nbsp; (0)
-                                    </a>
-                                </li>
-                            }
-                        </ul>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

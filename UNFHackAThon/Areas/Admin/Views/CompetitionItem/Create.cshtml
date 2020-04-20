@@ -9,7 +9,7 @@
 
 
 <br />
-<h2 class="text-info">Create Competition Item</h2>
+<h2 class="text-info">Create Competition</h2>
 <br />
 
 
@@ -45,7 +45,7 @@
         </div>
         <div class="form-group row">
             <div class="col-2">
-                <label asp-for="CompetitionItem.CompetitionId" class="col-form-label"></label>
+                <label>Competition Event</label>
             </div>
             <div class="col-5">
                 <select asp-for="@Model.CompetitionItem.CompetitionId" id="CompetitionId" asp-items="Model.Competition.ToSelectListItem(Model.CompetitionItem.CompetitionId)" class="form-control"></select>
@@ -53,24 +53,17 @@
         </div>
         <div class="form-group row">
             <div class="col-2">
-                <label asp-for="CompetitionItem.SubCompetitionId" class="col-form-label"></label>
+                <label>Competition Type</label>
             </div>
             <div class="col-5">
                 <select asp-for="@Model.CompetitionItem.SubCompetitionId" name="SubCompetitionId" id="SubCompetitionId" asp-items="@(new SelectList(string.Empty,"Id","Name"))" class="form-control"></select>
             </div>
         </div>
 
+
         <div class="form-group row">
             <div class="col-2">
-                <label asp-for="CompetitionItem.Rating" class="col-form-label"></label>
-            </div>
-            <div class="col-5">
-                <select asp-for="CompetitionItem.Rating" asp-items="Html.GetEnumSelectList<CompetitionItem.EDiff>()" class="form-control"></select>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="CompetitionItem.CompetitionDate" class="col-form-label"></label>
+                <label>Competition Date</label>
             </div>
             <div class="col-3">
                 <input asp-for="CompetitionItem.CompetitionDate" class="form-control" />
@@ -78,13 +71,14 @@
             <span asp-validation-for="CompetitionItem.CompetitionDate" class="text-danger"></span>
         </div>
 
-
-        <div class="form-group row">
-            <div class="col-5 offset-2">
-                <partial name="_CreateAndBackToListButton" />
+        <div class="col-8">
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    <partial name="_CreateAndBackToListButton" />
+                </div>
             </div>
         </div>
-    </div>
+        </div>
 </form>
 
 @section Scripts{

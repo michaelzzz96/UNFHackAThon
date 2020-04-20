@@ -130,7 +130,7 @@ namespace UNFHackAThon.Areas.Admin.Controllers
                 if (doesSubCompetitionExists.Count() > 0)
                 {
                     //Error 
-                    StatusMessage = "Error : Sub Competition exists under " + doesSubCompetitionExists.First().Competition.Name + " Competition. Please use another name. ";
+                    StatusMessage = "Error : Competition Type exists under " + doesSubCompetitionExists.First().Competition.Name + " Competition. Please use another name. ";
                 }
                 else
                 {

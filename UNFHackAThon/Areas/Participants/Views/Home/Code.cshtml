@@ -1,6 +1,11 @@
 ﻿@{
-    Layout = null;
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
+
+@using UNFHackAThon.Utility
 
 <!DOCTYPE html>
 
@@ -10,17 +15,58 @@
     <title>Index</title>
 </head>
 <body>
+    <br />
+    <h2 class="text-info">Upload Competition Code</h2>
+    <br />
+
+    <p>Participant must submit code for the following competition by thier name and the competition they joined in order to recieve for full points. For example: </p>
+    <br />
+    <ul>
+        <li>JohnSmith_DataScience</li>
+    </ul>
+    <br />
+
+
+    @*
+        To post files to server we need form with post method,
+        and additionally browser must use multipart/form-data
+        encoding. Otherwise file will not be sent.
+    *@
+
+
+
+    @*
+        If upload succeeded we will show nice message to user.
+    *@
+
     <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Code">
-        <span>Select File:</span>
-        <input type="file" name="postedFiles" multiple />
-        <input type="submit" value="Upload" />
-        <br />
-        <span style="color:green">@Html.Raw(ViewBag.Message)</span>
+        <div class="border backgroundWhite row">
+            <div class="col-8">
+                <br />
+                <span>Select File:</span>
+                <input type="file"  name="postedFiles" multiple />
+            </div>
+            <div class="col-lg-5">
+                <br />
+                <br />
 
+                <input type="submit" class="btn btn-primary" value="Upload" />
+
+                <br />
+                <br />
+                <a asp-action="Index" class="btn btn-success">Back to Home Page</a>
+
+
+            </div>
+            <br />
+            <span style="color:green">@Html.Raw(ViewBag.Message)</span>
+
+        </div>
     </form>
-
-    <a href="../DownloadZipFile/" target="_blank" class="btn btn-primary" style="margin-top:20px;">Download Zip</a>
-
+    @if (User.IsInRole(SD.ManageUser))
+    {
+        <a href="../DownloadZipFile/" target="_blank" class="btn btn-primary" style="margin-top:20px;">Download Zip of all the Competition's Code</a>
+    }
 
 </body>
 </html>

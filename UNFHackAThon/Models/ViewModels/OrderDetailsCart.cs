@@ -9,7 +9,8 @@ namespace UNFHackAThon.Models.ViewModels
     {
         public List<CompetitionCart> listCart {get; set;}
         public OrderHeader OrderHeader { get; set; }
+        public IEnumerable<ApplicationUser> ApplicationUser { get; set; }
+        public List<OrderDetails> OrderDetails { get; set; }
 
-      
-}
+    }
 }
