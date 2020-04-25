@@ -4,7 +4,7 @@ Azure Link: https://unfhackathon20200416013757.azurewebsites.net/Identity/Accoun
 
 Admin Account:
   Username: admin@gmail.com
-  Passwoord: Admin123!
+  Password: Admin123!
   
 Participant Test Account:
   Username: test@gmail.com
